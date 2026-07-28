@@ -27,13 +27,18 @@ OUTPUT_PATH = ROOT / "data" / "facilities.geojson"
 # overpass-api.de's main instance has been intermittently rejecting
 # requests with 406 Not Acceptable amid heavy load (see
 # https://github.com/drolbr/Overpass-API/issues/791 and
-# https://community.openstreetmap.org/t/overpass-api-error-406/143198).
-# We fail over across a couple of the public instances listed at
+# https://community.openstreetmap.org/t/overpass-api-error-406/143198),
+# and overpass.private.coffee has in turn been seen timing out (504) under
+# its own load. We fail over across full-planet public instances from
 # https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+# — deliberately excluding region-limited mirrors like overpass.osm.ch
+# (Switzerland-only data): a regional mirror would return an empty result
+# instead of an error for a Mainz query, which is a worse failure mode
+# than a visible one.
 OVERPASS_URLS = [
-    "https://overpass.private.coffee/api/interpreter",
     "https://overpass-api.de/api/interpreter",
-    "https://overpass.osm.ch/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
 ]
 
 # Overpass's usage policy asks every client to identify itself so operators
@@ -51,7 +56,7 @@ AREA_NAME = "Mainz"
 AREA_ADMIN_LEVEL = "6"
 
 REQUEST_TIMEOUT = 180
-MAX_RETRIES = 3
+MAX_RETRIES = 2  # per instance — kept low so a down mirror fails over quickly
 
 
 def load_categories() -> dict:

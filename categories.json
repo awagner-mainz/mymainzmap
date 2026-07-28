@@ -1,27 +1,47 @@
-{
-  "amenity=toilets": {
+[
+  {
+    "id": "toilets",
     "label": "Public toilet",
     "color": "#2E86AB",
-    "symbol": "T"
+    "symbol": "T",
+    "match": [{ "key": "amenity", "value": "toilets" }]
   },
-  "amenity=drinking_water": {
-    "label": "Drinking fountain",
+  {
+    "id": "drinking_water",
+    "label": "Drinking water tap",
     "color": "#1B998B",
-    "symbol": "W"
+    "symbol": "W",
+    "match": [{ "key": "amenity", "value": "drinking_water" }]
   },
-  "amenity=bench": {
+  {
+    "id": "fountain_drinking",
+    "label": "Fountain (drinking water)",
+    "color": "#0FB5AE",
+    "symbol": "W",
+    "match": [
+      { "key": "amenity", "value": "fountain" },
+      { "key": "drinking_water", "value": "yes" }
+    ]
+  },
+  {
+    "id": "bench",
     "label": "Bench",
     "color": "#A66E38",
-    "symbol": "B"
+    "symbol": "B",
+    "match": [{ "key": "amenity", "value": "bench" }]
   },
-  "leisure=playground": {
+  {
+    "id": "playground",
     "label": "Playground",
     "color": "#E4572E",
-    "symbol": "P"
+    "symbol": "P",
+    "match": [{ "key": "leisure", "value": "playground" }]
   },
-  "leisure=park": {
+  {
+    "id": "park",
     "label": "Park",
     "color": "#2E933C",
-    "symbol": "G"
+    "symbol": "G",
+    "match": [{ "key": "leisure", "value": "park" }]
   }
-}
+]

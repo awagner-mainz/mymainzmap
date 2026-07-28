@@ -7,10 +7,13 @@
     {
       "type": "Feature",
       "properties": {
-        "category": "amenity=bench",
+        "category": "bench",
         "name": "Example custom bench (not yet in OSM)",
-        "description": "Replace or delete this example. Any property you add here (photo URLs, opening hours, etc.) is available in the marker popup.",
-        "photo": ""
+        "description": "Replace or delete this example. Any property you add here shows up in the marker popup automatically — dedicated fields (description, photo, opening_hours) get their own line, everything else appears under \"More details\".",
+        "photo": "",
+        "material": "wood",
+        "backrest": "yes",
+        "website": "https://example.com"
       },
       "geometry": { "type": "Point", "coordinates": [8.2712, 49.9915] }
     }

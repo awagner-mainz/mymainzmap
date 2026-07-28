@@ -4,8 +4,20 @@ Fetch facility data for Mainz from the OpenStreetMap Overpass API and write
 it out as a single GeoJSON FeatureCollection at data/facilities.geojson.
 
 Categories are read from categories.json so that adding a new facility type
-only requires editing that file (add the OSM tag there, it gets picked up
-here automatically).
+only requires editing that file. Each category has a `match` list of
+{key, value} tag conditions that must ALL be present on an OSM element
+(AND, not OR) — this is what lets you query on more than one attribute at
+once, e.g. amenity=fountain AND drinking_water=yes for "fountains that are
+also drinking water sources", as opposed to amenity=drinking_water
+(dedicated drinking-water taps) which is a separate category.
+
+Every OSM tag on a matched element (minus a short deny-list of purely
+editorial/meta tags) is passed through to the GeoJSON feature's properties,
+so index.html can display whatever attributes happen to exist — OSM has no
+fixed schema, so "all available attributes" varies per feature; there's no
+way to know the full set in advance except by checking the relevant OSM
+wiki tag page for typical combinable tags, e.g.
+https://wiki.openstreetmap.org/wiki/Tag:amenity=drinking_water
 
 Docs:
   Overpass QL:    https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
@@ -58,22 +70,39 @@ AREA_ADMIN_LEVEL = "6"
 REQUEST_TIMEOUT = 180
 MAX_RETRIES = 2  # per instance — kept low so a down mirror fails over quickly
 
+# Editorial/meta tags that aren't useful facility info for an end user —
+# omitted when passing through OSM tags to the GeoJSON properties. Prefix
+# matched, so "source" also excludes "source:date", "source:geometry", etc.
+EXCLUDED_TAG_PREFIXES = ("source", "created_by", "fixme", "todo")
 
-def load_categories() -> dict:
+
+def load_categories() -> list:
     with open(CATEGORIES_PATH, encoding="utf-8") as f:
         return json.load(f)
 
 
-def build_query(categories: dict) -> str:
-    """Build one Overpass QL query covering every category in categories.json."""
+def build_query(categories: list) -> str:
+    """Build one Overpass QL query covering every category in categories.json.
+
+    Each category's `match` conditions are chained as consecutive bracket
+    filters, e.g. match=[{amenity:fountain},{drinking_water:yes}] becomes
+    ["amenity"="fountain"]["drinking_water"="yes"] — Overpass QL combines
+    consecutive filters with AND, which is exactly "has this tag AND that
+    tag". There's no direct OR between different tags in a single filter
+    chain; if you need that, run a separate clause per alternative (like
+    the toilets/drinking_water/etc. categories already do relative to each
+    other) — see https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
+    for the full filter syntax (key existence, regex, negation, etc.).
+    """
     clauses = []
-    for tag in categories:
-        key, value = tag.split("=", 1)
+    for cat in categories:
+        conditions = "".join(
+            f'["{m["key"]}"="{m["value"]}"]' for m in cat["match"]
+        )
         # node/way/relation so that e.g. leisure=park polygons are included
         # (`out center` below returns a representative point for them).
-        clauses.append(f'node["{key}"="{value}"](area.mainz);')
-        clauses.append(f'way["{key}"="{value}"](area.mainz);')
-        clauses.append(f'relation["{key}"="{value}"](area.mainz);')
+        for elem_type in ("node", "way", "relation"):
+            clauses.append(f"{elem_type}{conditions}(area.mainz);")
 
     return f"""
     [out:json][timeout:{REQUEST_TIMEOUT}];
@@ -85,15 +114,25 @@ def build_query(categories: dict) -> str:
     """
 
 
-def category_for_tags(tags: dict, categories: dict) -> str | None:
-    for tag in categories:
-        key, value = tag.split("=", 1)
-        if tags.get(key) == value:
-            return tag
+def category_for_tags(tags: dict, categories: list) -> dict | None:
+    """First category (in categories.json order) whose match conditions are
+    all satisfied by this element's tags. Put more specific categories
+    before more general ones in categories.json if they could overlap."""
+    for cat in categories:
+        if all(tags.get(m["key"]) == m["value"] for m in cat["match"]):
+            return cat
     return None
 
 
-def element_to_feature(element: dict, categories: dict) -> dict | None:
+def passthrough_tags(tags: dict) -> dict:
+    return {
+        k: v
+        for k, v in tags.items()
+        if not any(k == p or k.startswith(p + ":") for p in EXCLUDED_TAG_PREFIXES)
+    }
+
+
+def element_to_feature(element: dict, categories: list) -> dict | None:
     tags = element.get("tags", {})
     category = category_for_tags(tags, categories)
     if category is None:
@@ -110,15 +149,15 @@ def element_to_feature(element: dict, categories: dict) -> dict | None:
         lon, lat = center["lon"], center["lat"]
 
     properties = {
-        "category": category,
-        "name": tags.get("name", categories[category]["label"]),
+        # Every OSM tag on this element (minus the deny-list) first, then
+        # our computed fields — ordered this way so a raw tag can never
+        # accidentally clobber one of these.
+        **passthrough_tags(tags),
+        "category": category["id"],
+        "name": tags.get("name", category["label"]),
         "osm_type": element["type"],
         "osm_id": element["id"],
     }
-    # Pass through a few commonly-useful extra attributes, if present.
-    for key in ("opening_hours", "wheelchair", "image", "wikimedia_commons"):
-        if key in tags:
-            properties[key] = tags[key]
 
     return {
         "type": "Feature",

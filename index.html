@@ -97,6 +97,26 @@
     margin-top: 6px;
     display: block;
   }
+  .facility-details {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  .facility-details summary {
+    cursor: pointer;
+    color: var(--text-muted);
+  }
+  .facility-details dl {
+    margin: 6px 0 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 8px;
+  }
+  .facility-details dt {
+    color: var(--text-muted);
+  }
+  .facility-details dd {
+    margin: 0;
+  }
 
   /* Small screens: collapse the panel to not cover the whole map */
   @media (max-width: 480px) {
@@ -177,10 +197,11 @@
     fetch("data/facilities.geojson").then((r) => r.json()),
     fetch("data/custom-places.geojson").then((r) => r.json()),
   ]);
+  const categoriesById = Object.fromEntries(categories.map((c) => [c.id, c]));
 
   // ---- Marker styling ---------------------------------------------------
-  function iconFor(category) {
-    const style = categories[category] || { color: "#555", symbol: "?" };
+  function iconFor(categoryId) {
+    const style = categoriesById[categoryId] || { color: "#555", symbol: "?" };
     return L.divIcon({
       className: "facility-marker",
       html: `<div style="
@@ -199,13 +220,55 @@
     });
   }
 
-  function popupContent(props, category) {
-    const label = (categories[category] || {}).label || category;
+  // Fields already given their own dedicated line in the popup, or that
+  // are internal bookkeeping — excluded from the generic "more details"
+  // list below so nothing appears twice.
+  const POPUP_HANDLED_KEYS = new Set([
+    "category", "osm_type", "osm_id", "name", "description",
+    "photo", "image", "opening_hours",
+  ]);
+  // Keys worth rendering as a clickable link/phone number rather than plain text.
+  const LINK_KEYS = new Set(["website", "contact:website", "url"]);
+  const PHONE_KEYS = new Set(["phone", "contact:phone"]);
+
+  function prettifyKey(key) {
+    return key
+      .replace(/[_:]/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  function popupContent(props, categoryId) {
+    const label = (categoriesById[categoryId] || {}).label || categoryId;
     const name = props.name || label;
+
     let html = `<div class="facility-popup"><h3>${escapeHtml(name)}</h3><p>${escapeHtml(label)}</p>`;
     if (props.description) html += `<p>${escapeHtml(props.description)}</p>`;
     if (props.opening_hours) html += `<p>Opening hours: ${escapeHtml(props.opening_hours)}</p>`;
-    if (props.photo) html += `<img src="${escapeHtml(props.photo)}" alt="${escapeHtml(name)}" />`;
+    const photoUrl = props.photo || props.image;
+    if (photoUrl) html += `<img src="${escapeHtml(photoUrl)}" alt="${escapeHtml(name)}" />`;
+
+    // Every other attribute that came through from OSM (or from
+    // custom-places.geojson), shown generically so nothing needs a
+    // dedicated line of code to become visible in the popup.
+    const extras = Object.entries(props).filter(([key, value]) => {
+      return !POPUP_HANDLED_KEYS.has(key) && value !== "" && value != null;
+    });
+    if (extras.length) {
+      html += `<details class="facility-details"><summary>More details</summary><dl>`;
+      extras.forEach(([key, value]) => {
+        let displayValue;
+        if (LINK_KEYS.has(key)) {
+          displayValue = `<a href="${escapeHtml(value)}" target="_blank" rel="noopener">${escapeHtml(value)}</a>`;
+        } else if (PHONE_KEYS.has(key)) {
+          displayValue = `<a href="tel:${escapeHtml(value)}">${escapeHtml(value)}</a>`;
+        } else {
+          displayValue = escapeHtml(value);
+        }
+        html += `<dt>${escapeHtml(prettifyKey(key))}</dt><dd>${displayValue}</dd>`;
+      });
+      html += `</dl></details>`;
+    }
+
     html += "</div>";
     return html;
   }
@@ -223,7 +286,7 @@
   function addFeatureCollection(fc) {
     (fc.features || []).forEach((feature) => {
       const category = feature.properties.category;
-      if (!categories[category]) return; // skip unknown categories quietly
+      if (!categoriesById[category]) return; // skip unknown categories quietly
 
       const [lon, lat] = feature.geometry.coordinates;
       const marker = L.marker([lat, lon], { icon: iconFor(category) });
@@ -241,18 +304,18 @@
 
   // ---- Category filter panel ---------------------------------------------
   const listEl = document.getElementById("category-list");
-  Object.entries(categories).forEach(([category, style]) => {
-    const id = `cat-${category.replace(/[^a-z0-9]/gi, "-")}`;
+  categories.forEach((cat) => {
+    const id = `cat-${cat.id.replace(/[^a-z0-9]/gi, "-")}`;
     const label = document.createElement("label");
     label.innerHTML = `
       <input type="checkbox" id="${id}" checked />
-      <span class="swatch" style="background:${style.color}"></span>
-      ${escapeHtml(style.label)}
+      <span class="swatch" style="background:${cat.color}"></span>
+      ${escapeHtml(cat.label)}
     `;
     listEl.appendChild(label);
 
     label.querySelector("input").addEventListener("change", (e) => {
-      const layer = categoryLayers[category];
+      const layer = categoryLayers[cat.id];
       if (!layer) return;
       if (e.target.checked) {
         map.addLayer(layer);

@@ -6,14 +6,16 @@ and parks in Mainz, sourced from OpenStreetMap.
 ## How it fits together
 
 - **`categories.json`** — the one file to edit to add a new facility type.
-  Maps an OSM tag (`key=value`) to a label, color and marker symbol.
+  An array of categories, each with an `id`, `label`, `color`, `symbol`,
+  and a `match` list of OSM tags that must **all** be present (AND) for an
+  element to count as that category.
 - **`data/facilities.geojson`** — OSM-derived data. Regenerated automatically
   by the scheduled GitHub Action (see below) — don't hand-edit it, your
   changes will be overwritten on the next run.
 - **`data/custom-places.geojson`** — hand-maintained overlay for anything
   not (yet) mapped in OSM. Add attributes freely here (photo URLs,
-  descriptions, opening hours) — any property you add shows up in the
-  marker popup automatically.
+  descriptions, opening hours, anything) — any property you add shows up in
+  the marker popup automatically.
 - **`scripts/fetch_osm_data.py`** — queries the
   [Overpass API](https://dev.overpass-api.de/overpass-doc/en/) for every
   category in `categories.json` and writes `data/facilities.geojson`.
@@ -28,7 +30,13 @@ and parks in Mainz, sourced from OpenStreetMap.
 
 1. Add an entry to `categories.json`, e.g.:
    ```json
-   "amenity=bicycle_parking": { "label": "Bike parking", "color": "#6C5B7B", "symbol": "P" }
+   {
+     "id": "bicycle_parking",
+     "label": "Bike parking",
+     "color": "#6C5B7B",
+     "symbol": "P",
+     "match": [{ "key": "amenity", "value": "bicycle_parking" }]
+   }
    ```
 2. Look up the correct OSM tag on the
    [Map Features wiki](https://wiki.openstreetmap.org/wiki/Map_features)
@@ -36,6 +44,74 @@ and parks in Mainz, sourced from OpenStreetMap.
 3. Either wait for the next scheduled run, or trigger it manually from the
    repo's **Actions** tab → "Update facilities data from OpenStreetMap" →
    **Run workflow**.
+
+## Querying by more than one attribute
+
+`match` can list more than one `{key, value}` pair — an element only
+counts as that category if it has **all** of them. This is how you'd tell
+apart, say, decorative fountains from fountains that are also a drinking
+water source: in OSM these are the same base tag (`amenity=fountain`) with
+an additional `drinking_water=yes` sub-tag when it applies (see
+[Key:drinking_water](https://wiki.openstreetmap.org/wiki/Key:drinking_water)).
+`categories.json` already has a working example:
+```json
+{
+  "id": "fountain_drinking",
+  "label": "Fountain (drinking water)",
+  "color": "#0FB5AE",
+  "symbol": "W",
+  "match": [
+    { "key": "amenity", "value": "fountain" },
+    { "key": "drinking_water", "value": "yes" }
+  ]
+}
+```
+This becomes the Overpass QL filter chain
+`["amenity"="fountain"]["drinking_water"="yes"]` — consecutive bracket
+filters are ANDed together automatically. If a category earlier in the
+list would also match the same element, that earlier one wins (categories
+are checked in file order) — keep more specific categories above more
+general ones if they could overlap.
+
+What `match` can't do: OR across different tags, or `!=`/regex conditions.
+Overpass QL supports those too (`[key]` for "has this key regardless of
+value", `[key!=value]`, `[key~"regex"]`, and a `union` of separate clauses
+in parentheses for OR) — see the
+[Overpass QL reference](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Tag_filters)
+for the full syntax. `categories.json`'s schema only covers the common
+AND-of-exact-values case; anything beyond that means hand-editing the
+`build_query()` function in `scripts/fetch_osm_data.py` for that one
+category, following the same pattern as the existing loop.
+
+## Attributes in the marker popup
+
+OSM has no fixed schema — any node can carry any tag, and which ones
+actually exist varies per feature (a bench might have `material` and
+`backrest`; a drinking fountain might have `bottle` and `check_date`).
+Because of that, `fetch_osm_data.py` doesn't use an allowlist: it passes
+through **every** OSM tag on a matched element into the GeoJSON feature's
+properties, except for a short deny-list of purely editorial/meta tags
+(`source`, `created_by`, `fixme`, `todo`, and their `key:subkey` variants)
+defined in `EXCLUDED_TAG_PREFIXES` near the top of that script — edit that
+list if you want to hide (or stop hiding) something.
+
+In `index.html`, `popupContent()` gives a few fields their own line
+(`name`, `description`, `opening_hours`, a photo/`image`), and puts
+everything else under a collapsed "More details" section automatically —
+so a new tag doesn't need any code change to show up, it just appears
+there with its key prettified (`drinking_water` → "Drinking water").
+`website`/`contact:website` and `phone`/`contact:phone` are rendered as
+clickable links; add more keys to `LINK_KEYS`/`PHONE_KEYS` in `index.html`
+for the same treatment, or to `POPUP_HANDLED_KEYS` to give a tag its own
+dedicated line instead of leaving it in the generic list.
+
+There's no way to know in advance every attribute a given OSM tag *could*
+have — the closest thing is each tag's wiki page, which documents commonly
+combined sub-tags, e.g.
+[Tag:amenity=drinking_water](https://wiki.openstreetmap.org/wiki/Tag:amenity=drinking_water)
+lists `bottle`, `fee`, `check_date`, `wheelchair` and others as tags people
+commonly add alongside it — but nothing enforces that any particular one
+is present on any particular node.
 
 ## Adding a place that's missing from OSM
 

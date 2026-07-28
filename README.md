@@ -6,7 +6,7 @@ and parks in Mainz, sourced from OpenStreetMap.
 ## How it fits together
 
 - **`categories.json`** — the one file to edit to add a new facility type.
-  Maps an OSM tag (`key=value`) to a label, color and marker symbol.
+  Maps an OSM tag (`key=value`) to a label and marker color.
 - **`data/facilities.geojson`** — OSM-derived data. Regenerated automatically
   by the scheduled GitHub Action (see below) — don't hand-edit it, your
   changes will be overwritten on the next run.
@@ -22,13 +22,20 @@ and parks in Mainz, sourced from OpenStreetMap.
   [`schedule` trigger](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule),
   no separate server needed) and commits the result if it changed.
 - **`index.html`** — the map itself: Leaflet, category filters, GPS locate
-  control, and Leaflet.EdgeMarker for off-screen indicators.
+  control, and Leaflet.EdgeMarker for off-screen indicators. Markers are
+  rendered as canvas circles (`L.circleMarker` on a shared `L.canvas()`
+  renderer), not `L.divIcon` DOM pins — deliberately, to avoid a
+  [known Firefox bug](https://github.com/Leaflet/Leaflet/issues/6249)
+  where divIcon markers' position gets corrupted during the zoom
+  animation, and because canvas markers stay fast with the hundreds of
+  points a city-wide dataset (benches especially) can produce. Worth
+  keeping in mind if you're tempted to switch back to custom pin shapes.
 
 ## Adding a facility category
 
 1. Add an entry to `categories.json`, e.g.:
    ```json
-   "amenity=bicycle_parking": { "label": "Bike parking", "color": "#6C5B7B", "symbol": "P" }
+   "amenity=bicycle_parking": { "label": "Bike parking", "color": "#6C5B7B" }
    ```
 2. Look up the correct OSM tag on the
    [Map Features wiki](https://wiki.openstreetmap.org/wiki/Map_features)
@@ -83,28 +90,44 @@ another instance from that wiki list to `OVERPASS_URLS`.
 3. The Action needs no secrets — it uses the default `GITHUB_TOKEN`, which
    already has write access to the repo it runs in.
 
-## Map tiles: hosted OSM tiles
+## Map tiles: CARTO Positron
 
-`index.html` uses hosted `tile.openstreetmap.org` tiles directly. This is
-allowed under the
-[OSM Foundation's tile usage policy](https://operations.osmfoundation.org/policies/tiles/)
-as long as usage stays interactive and modest: no bulk downloading or tile
-archiving, no headless/scripted panning, and visible attribution kept on
-the map (already wired up via `mapAttribution` in `index.html`). A small
-personal project's normal traffic fits comfortably within that. The
-tradeoff you're accepting: the policy also says access can be throttled or
-blocked without notice if usage patterns look automated or grow
-unexpectedly, since the tile servers run on donated capacity — there's no
-SLA.
+`index.html` uses [CARTO Positron](https://github.com/CartoDB/basemap-styles)
+tiles — a plain, label-only basemap (streets, building outlines, place
+names) with no baked-in shop/amenity icons. This was a deliberate switch
+away from plain OSM-Carto tiles (`tile.openstreetmap.org`): that style
+renders POI icons — restaurants, shops, pharmacies — directly into the
+tile image pixels, which isn't something the app can filter or turn off;
+there's no layer to toggle, since it's part of the basemap's own opinion
+about what to show. Positron is designed for exactly this use case:
+overlaying your own point data without competing icon clutter. It also
+takes some load off OSM's own donated tile servers, a nice side effect
+though not the primary reason for the switch.
 
-### If OSM tile access gets cut off
+CARTO's basemap service is free, with its own best-effort, no-SLA terms
+(see [carto.com/attributions](https://carto.com/attributions)) similar in
+spirit to the [OSM Foundation's tile policy](https://operations.osmfoundation.org/policies/tiles/).
+This site's traffic — small, interactive-only, normal pan/zoom, no
+pre-fetching or headless rendering — fits comfortably within that.
+
+### If your tile provider gets cut off
 
 Swap the single `L.tileLayer(...)` call in `index.html` for one of these —
 nothing else in the app needs to change, since Leaflet's tile layer API is
 the same regardless of provider.
 
-**Option A — a hosted third-party provider** (quickest migration, still
-no server to run):
+**Option A — hosted OSM tiles** (brings back the shop/POI icon clutter,
+but is a quick way to confirm the map itself still works):
+```js
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 19,
+}).addTo(map);
+```
+
+**Option B — another hosted provider with a clean/label-only style**
+(quickest migration that keeps the icon-free look, still no server to
+run):
 ```js
 // e.g. MapTiler or Stadia Maps, both have a free tier and give you an API key
 L.tileLayer("https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=YOUR_KEY", {
@@ -113,7 +136,7 @@ L.tileLayer("https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=YOUR_KEY"
 }).addTo(map);
 ```
 
-**Option B — self-hosted static tiles**, using a downloaded extract such
+**Option C — self-hosted static tiles**, using a downloaded extract such
 as [MapTiler's Mainz on-prem dataset](https://www.maptiler.com/on-prem-datasets/europe/germany/mainz/):
 
 1. That download is typically an **MBTiles** file (a single SQLite

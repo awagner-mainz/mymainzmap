@@ -120,27 +120,35 @@
   // ---- Map setup -----------------------------------------------------
   const map = L.map("map", { zoomControl: true }).setView([49.9929, 8.2473], 13);
 
-  // Tile layer: hosted OSM tiles (tile.openstreetmap.org).
+  // Tile layer: CARTO Positron — a plain, label-only basemap style
+  // (streets, building outlines, place names) with no baked-in shop/amenity
+  // icons. Regular OSM-Carto tiles (tile.openstreetmap.org) render POI
+  // icons directly into the image pixels, which isn't something we can
+  // filter — there's no layer to toggle, it's the basemap's own opinion
+  // about what to show. Positron is designed for exactly this situation:
+  // overlaying your own point data without visual competition.
+  // Docs: https://github.com/CartoDB/basemap-styles
+  //
+  // This also happens to take load off OSM's own donated tile servers,
+  // which is a nice side effect but wasn't the reason for the switch.
+  // CARTO's basemap service is free with its own (similarly best-effort,
+  // no-SLA) usage terms: https://carto.com/attributions
   //
   // This site's traffic is small and interactive-only (normal user pan/zoom,
-  // no headless rendering, no pre-fetching), which fits within the
-  // OSM Foundation's tile usage policy: https://operations.osmfoundation.org/policies/tiles/
-  // Key rules this site follows:
-  //   - no bulk downloading / tile archiving (we don't cache or redistribute tiles)
-  //   - visible attribution kept on the map at all times (see below)
-  //   - standard browser User-Agent, no scripted/headless map panning
-  //
-  // Access can still be throttled or blocked without notice if usage grows
-  // or patterns look automated — if that happens, swap this tileLayer call
-  // for a self-hosted or third-party provider (MapTiler, Stadia Maps, etc.);
-  // see the "If OSM tile access gets cut off" section in the README for a
+  // no headless rendering, no pre-fetching). If CARTO access is ever
+  // throttled or blocked, swap this tileLayer call for a self-hosted or
+  // third-party provider (MapTiler, Stadia Maps, etc.) — see the
+  // "If your tile provider gets cut off" section in the README for a
   // ready-to-go migration path that keeps the rest of the app unchanged.
   const mapAttribution =
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
+    '&copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     attribution: mapAttribution,
-    maxZoom: 19,
+    subdomains: "abcd",
+    maxZoom: 20,
+    detectRetina: true, // required for the {r} placeholder above to resolve to "" or "@2x"
   }).addTo(map);
 
   // ---- GPS locate control (mobile "find me") --------------------------
@@ -169,24 +177,23 @@
   ]);
 
   // ---- Marker styling ---------------------------------------------------
-  function iconFor(category) {
-    const style = categories[category] || { color: "#555", symbol: "?" };
-    return L.divIcon({
-      className: "facility-marker",
-      html: `<div style="
-        background:${style.color};
-        color:#fff;
-        width:26px;height:26px;border-radius:50% 50% 50% 0;
-        transform:rotate(-45deg);
-        display:flex;align-items:center;justify-content:center;
-        box-shadow:0 1px 3px rgba(0,0,0,0.4);
-        border:2px solid #fff;">
-        <span style="transform:rotate(45deg);font:600 11px sans-serif;">${style.symbol}</span>
-      </div>`,
-      iconSize: [26, 26],
-      iconAnchor: [13, 26],
-      popupAnchor: [0, -24],
-    });
+  // Canvas-rendered circle markers rather than divIcon (DOM element) markers.
+  // Two reasons:
+  //   1. Firefox has a known bug where divIcon markers' CSS transforms get
+  //      miscalculated specifically during the zoom animation:
+  //      https://github.com/Leaflet/Leaflet/issues/6249 — visible as
+  //      markers rendering at the wrong position, which with many markers
+  //      piled up can look like a block of visual noise.
+  //   2. Canvas markers don't create a DOM element per marker at all, which
+  //      matters once the real OSM-sourced data (hundreds of benches across
+  //      Mainz, easily) replaces the tiny placeholder sample — canvas
+  //      rendering stays fast and light where per-marker DOM elements don't.
+  // All markers share one L.canvas() renderer instance so Leaflet batches
+  // them onto a single <canvas>, rather than one per marker.
+  const canvasRenderer = L.canvas({ padding: 0.5 });
+
+  function styleFor(category) {
+    return categories[category] || { color: "#555", label: category };
   }
 
   function popupContent(props, category) {
@@ -208,9 +215,11 @@
 
   // One Leaflet layerGroup per category, so the sidebar checkboxes can
   // toggle them independently, plus one master group that always holds
-  // every visible marker (used by EdgeMarker below).
+  // every visible marker (used by EdgeMarker below). This group is
+  // intentionally never added to the map itself — it's just a registry
+  // EdgeMarker reads from; the actual visible layers are categoryLayers.
   const categoryLayers = {};
-  const allMarkersGroup = L.layerGroup().addTo(map);
+  const allMarkersGroup = L.layerGroup();
 
   function addFeatureCollection(fc) {
     (fc.features || []).forEach((feature) => {
@@ -218,7 +227,15 @@
       if (!categories[category]) return; // skip unknown categories quietly
 
       const [lon, lat] = feature.geometry.coordinates;
-      const marker = L.marker([lat, lon], { icon: iconFor(category) });
+      const style = styleFor(category);
+      const marker = L.circleMarker([lat, lon], {
+        renderer: canvasRenderer,
+        radius: 8,
+        color: "#fff", // marker outline, for contrast against the basemap
+        weight: 2,
+        fillColor: style.color,
+        fillOpacity: 0.9,
+      });
       marker.bindPopup(popupContent(feature.properties, category));
 
       if (!categoryLayers[category]) {

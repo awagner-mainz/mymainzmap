@@ -57,6 +57,24 @@ pip install requests
 python scripts/fetch_osm_data.py
 ```
 
+Before running it for real, edit `USER_AGENT` near the top of
+`scripts/fetch_osm_data.py` to point at something that identifies you —
+your repo URL or an email address. Overpass's usage policy asks for this
+so operators can reach you if there's a problem; it also happens to be
+what protects you from some of the current anti-scraper filtering (see
+below).
+
+### About the Overpass 406 errors
+
+`overpass-api.de`'s main instance has been intermittently returning `406
+Not Acceptable` under heavy load — this is a known, widely-reported
+issue (see [drolbr/Overpass-API#791](https://github.com/drolbr/Overpass-API/issues/791)),
+not something specific to this query. The script sends a proper
+identifying `User-Agent` and fails over across a short list of public
+[Overpass instances](https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances)
+to work around it. If all of them fail, wait a bit and re-run — or add
+another instance from that wiki list to `OVERPASS_URLS`.
+
 ## Deploying to GitHub Pages
 
 1. Push this repo to GitHub.

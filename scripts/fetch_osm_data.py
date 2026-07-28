@@ -24,7 +24,23 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 CATEGORIES_PATH = ROOT / "categories.json"
 OUTPUT_PATH = ROOT / "data" / "facilities.geojson"
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+# overpass-api.de's main instance has been intermittently rejecting
+# requests with 406 Not Acceptable amid heavy load (see
+# https://github.com/drolbr/Overpass-API/issues/791 and
+# https://community.openstreetmap.org/t/overpass-api-error-406/143198).
+# We fail over across a couple of the public instances listed at
+# https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+OVERPASS_URLS = [
+    "https://overpass.private.coffee/api/interpreter",
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.osm.ch/api/interpreter",
+]
+
+# Overpass's usage policy asks every client to identify itself so operators
+# can get in touch if something's wrong — a generic "python-requests/x.x"
+# User-Agent is exactly what's getting caught by the current anti-scraper
+# filtering. Put your own contact info here (an email, or your repo URL).
+USER_AGENT = "mainz-facilities-map/1.0 (https://github.com/awagner-mainz/mymainzmap)"
 
 # Mainz's administrative area, resolved by name rather than a hardcoded
 # relation id, so the query always matches the city's real boundary as
@@ -108,18 +124,26 @@ def element_to_feature(element: dict, categories: dict) -> dict | None:
 
 def fetch_overpass(query: str) -> dict:
     last_error = None
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            response = requests.post(
-                OVERPASS_URL, data={"data": query}, timeout=REQUEST_TIMEOUT
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as exc:
-            last_error = exc
-            print(f"Attempt {attempt} failed: {exc}", file=sys.stderr)
-            time.sleep(10 * attempt)
-    raise RuntimeError(f"Overpass request failed after {MAX_RETRIES} attempts") from last_error
+    headers = {"User-Agent": USER_AGENT}
+
+    for url in OVERPASS_URLS:
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                print(f"Querying {url} (attempt {attempt})...")
+                response = requests.post(
+                    url, data={"data": query}, headers=headers, timeout=REQUEST_TIMEOUT
+                )
+                response.raise_for_status()
+                return response.json()
+            except requests.RequestException as exc:
+                last_error = exc
+                print(f"  failed: {exc}", file=sys.stderr)
+                time.sleep(10 * attempt)
+        print(f"Giving up on {url}, trying next instance if any remain.", file=sys.stderr)
+
+    raise RuntimeError(
+        f"Overpass request failed on all {len(OVERPASS_URLS)} instances"
+    ) from last_error
 
 
 def main() -> None:

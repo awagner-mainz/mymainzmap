@@ -1,0 +1,36 @@
+name: Update facilities data from OpenStreetMap
+
+on:
+  schedule:
+    # Every Monday at 03:17 UTC. Off-the-hour minute to avoid the
+    # top-of-hour pile-up on GitHub's schedulers.
+    # Cron syntax reference: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
+    - cron: "17 3 * * 1"
+  workflow_dispatch: {} # lets you trigger a run manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch latest OSM data
+        run: python scripts/fetch_osm_data.py
+
+      - name: Commit updated data if it changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update facilities data from OpenStreetMap"
+          file_pattern: "data/facilities.geojson"

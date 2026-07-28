@@ -1,0 +1,18 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "note": "Add points here that aren't in OpenStreetMap yet. Once you've mapped them in OSM (recommended), remove them from here — they'll start showing up automatically via facilities.geojson."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "category": "amenity=bench",
+        "name": "Example custom bench (not yet in OSM)",
+        "description": "Replace or delete this example. Any property you add here (photo URLs, opening hours, etc.) is available in the marker popup.",
+        "photo": ""
+      },
+      "geometry": { "type": "Point", "coordinates": [8.2712, 49.9915] }
+    }
+  ]
+}

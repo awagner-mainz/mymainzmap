@@ -1,0 +1,27 @@
+{
+  "amenity=toilets": {
+    "label": "Public toilet",
+    "color": "#2E86AB",
+    "symbol": "T"
+  },
+  "amenity=drinking_water": {
+    "label": "Drinking fountain",
+    "color": "#1B998B",
+    "symbol": "W"
+  },
+  "amenity=bench": {
+    "label": "Bench",
+    "color": "#A66E38",
+    "symbol": "B"
+  },
+  "leisure=playground": {
+    "label": "Playground",
+    "color": "#E4572E",
+    "symbol": "P"
+  },
+  "leisure=park": {
+    "label": "Park",
+    "color": "#2E933C",
+    "symbol": "G"
+  }
+}

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Mainz public facilities map</title>
+
+<!-- Leaflet core -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+<!-- Leaflet.EdgeMarker — https://github.com/ubergesundheit/Leaflet.EdgeMarker -->
+<script src="https://cdn.jsdelivr.net/gh/ubergesundheit/Leaflet.EdgeMarker@master/Leaflet.EdgeMarker.js"></script>
+
+<!-- Leaflet.locatecontrol — GPS "find me" control, https://github.com/domoritz/leaflet-locatecontrol -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.85.1/L.Control.Locate.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.85.1/L.Control.Locate.min.js"></script>
+
+<style>
+  :root {
+    --panel-bg: #ffffff;
+    --panel-border: #d8d8d4;
+    --text: #26221c;
+    --text-muted: #6b665e;
+  }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+  }
+  #map {
+    width: 100%;
+    height: 100vh;
+  }
+
+  /* Category filter panel */
+  #category-panel {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    padding: 10px 14px;
+    max-width: 220px;
+    font-size: 14px;
+  }
+  #category-panel h1 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  #category-panel label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    cursor: pointer;
+  }
+  #category-panel input {
+    cursor: pointer;
+  }
+  .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  #category-panel .toggle-all {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 0 0 8px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .facility-popup h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+  }
+  .facility-popup p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .facility-popup img {
+    max-width: 220px;
+    border-radius: 4px;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* Small screens: collapse the panel to not cover the whole map */
+  @media (max-width: 480px) {
+    #category-panel {
+      max-width: 150px;
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="category-panel">
+  <h1>Facilities</h1>
+  <button class="toggle-all" id="toggle-all">show / hide all</button>
+  <div id="category-list"><!-- populated from categories.json --></div>
+</div>
+
+<script>
+(async function () {
+  // ---- Map setup -----------------------------------------------------
+  const map = L.map("map", { zoomControl: true }).setView([49.9929, 8.2473], 13);
+
+  // Tile layer: hosted OSM tiles (tile.openstreetmap.org).
+  //
+  // This site's traffic is small and interactive-only (normal user pan/zoom,
+  // no headless rendering, no pre-fetching), which fits within the
+  // OSM Foundation's tile usage policy: https://operations.osmfoundation.org/policies/tiles/
+  // Key rules this site follows:
+  //   - no bulk downloading / tile archiving (we don't cache or redistribute tiles)
+  //   - visible attribution kept on the map at all times (see below)
+  //   - standard browser User-Agent, no scripted/headless map panning
+  //
+  // Access can still be throttled or blocked without notice if usage grows
+  // or patterns look automated — if that happens, swap this tileLayer call
+  // for a self-hosted or third-party provider (MapTiler, Stadia Maps, etc.);
+  // see the "If OSM tile access gets cut off" section in the README for a
+  // ready-to-go migration path that keeps the rest of the app unchanged.
+  const mapAttribution =
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: mapAttribution,
+    maxZoom: 19,
+  }).addTo(map);
+
+  // ---- GPS locate control (mobile "find me") --------------------------
+  // https://github.com/domoritz/leaflet-locatecontrol
+  L.control
+    .locate({
+      position: "topleft",
+      drawCircle: true, // shows the GPS accuracy radius
+      follow: false, // set true to keep re-centering as the user walks
+      keepCurrentZoomLevel: true,
+      showPopup: false,
+      strings: {
+        title: "Show my location",
+      },
+      locateOptions: {
+        enableHighAccuracy: true,
+      },
+    })
+    .addTo(map);
+
+  // ---- Load data --------------------------------------------------------
+  const [categories, osmData, customData] = await Promise.all([
+    fetch("categories.json").then((r) => r.json()),
+    fetch("data/facilities.geojson").then((r) => r.json()),
+    fetch("data/custom-places.geojson").then((r) => r.json()),
+  ]);
+
+  // ---- Marker styling ---------------------------------------------------
+  function iconFor(category) {
+    const style = categories[category] || { color: "#555", symbol: "?" };
+    return L.divIcon({
+      className: "facility-marker",
+      html: `<div style="
+        background:${style.color};
+        color:#fff;
+        width:26px;height:26px;border-radius:50% 50% 50% 0;
+        transform:rotate(-45deg);
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 1px 3px rgba(0,0,0,0.4);
+        border:2px solid #fff;">
+        <span style="transform:rotate(45deg);font:600 11px sans-serif;">${style.symbol}</span>
+      </div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 26],
+      popupAnchor: [0, -24],
+    });
+  }
+
+  function popupContent(props, category) {
+    const label = (categories[category] || {}).label || category;
+    const name = props.name || label;
+    let html = `<div class="facility-popup"><h3>${escapeHtml(name)}</h3><p>${escapeHtml(label)}</p>`;
+    if (props.description) html += `<p>${escapeHtml(props.description)}</p>`;
+    if (props.opening_hours) html += `<p>Opening hours: ${escapeHtml(props.opening_hours)}</p>`;
+    if (props.photo) html += `<img src="${escapeHtml(props.photo)}" alt="${escapeHtml(name)}" />`;
+    html += "</div>";
+    return html;
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  // One Leaflet layerGroup per category, so the sidebar checkboxes can
+  // toggle them independently, plus one master group that always holds
+  // every visible marker (used by EdgeMarker below).
+  const categoryLayers = {};
+  const allMarkersGroup = L.layerGroup().addTo(map);
+
+  function addFeatureCollection(fc) {
+    (fc.features || []).forEach((feature) => {
+      const category = feature.properties.category;
+      if (!categories[category]) return; // skip unknown categories quietly
+
+      const [lon, lat] = feature.geometry.coordinates;
+      const marker = L.marker([lat, lon], { icon: iconFor(category) });
+      marker.bindPopup(popupContent(feature.properties, category));
+
+      if (!categoryLayers[category]) {
+        categoryLayers[category] = L.layerGroup().addTo(map);
+      }
+      categoryLayers[category].addLayer(marker);
+      allMarkersGroup.addLayer(marker);
+    });
+  }
+
+  addFeatureCollection(osmData);
+  addFeatureCollection(customData);
+
+  // ---- Off-screen indicators (Leaflet.EdgeMarker) ------------------------
+  // https://github.com/ubergesundheit/Leaflet.EdgeMarker
+  const edgeMarkers = L.edgeMarker({
+    icon: L.icon({
+      iconUrl: "https://cdn.jsdelivr.net/gh/ubergesundheit/Leaflet.EdgeMarker@master/images/edge-arrow-marker-black.png",
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    }),
+    rotateIcons: true,
+    layerGroup: allMarkersGroup, // only track the facility markers, not the tile layer etc.
+  }).addTo(map);
+
+  // ---- Category filter panel ---------------------------------------------
+  const listEl = document.getElementById("category-list");
+  Object.entries(categories).forEach(([category, style]) => {
+    const id = `cat-${category.replace(/[^a-z0-9]/gi, "-")}`;
+    const label = document.createElement("label");
+    label.innerHTML = `
+      <input type="checkbox" id="${id}" checked />
+      <span class="swatch" style="background:${style.color}"></span>
+      ${escapeHtml(style.label)}
+    `;
+    listEl.appendChild(label);
+
+    label.querySelector("input").addEventListener("change", (e) => {
+      const layer = categoryLayers[category];
+      if (!layer) return;
+      if (e.target.checked) {
+        map.addLayer(layer);
+      } else {
+        map.removeLayer(layer);
+      }
+      // Keep EdgeMarker + the "all markers" group in sync with what's
+      // actually visible, so hidden categories don't show edge arrows.
+      allMarkersGroup.clearLayers();
+      Object.entries(categoryLayers).forEach(([cat, grp]) => {
+        if (map.hasLayer(grp)) {
+          grp.eachLayer((m) => allMarkersGroup.addLayer(m));
+        }
+      });
+    });
+  });
+
+  let allVisible = true;
+  document.getElementById("toggle-all").addEventListener("click", () => {
+    allVisible = !allVisible;
+    document.querySelectorAll("#category-list input").forEach((input) => {
+      input.checked = allVisible;
+      input.dispatchEvent(new Event("change"));
+    });
+  });
+})();
+</script>
+</body>
+</html>

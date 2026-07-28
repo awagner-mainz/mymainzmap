@@ -9,8 +9,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 
-<!-- Leaflet.EdgeMarker — https://github.com/ubergesundheit/Leaflet.EdgeMarker -->
-<script src="https://cdn.jsdelivr.net/gh/ubergesundheit/Leaflet.EdgeMarker@master/Leaflet.EdgeMarker.js"></script>
+<!-- Leaflet.EdgeMarker is disabled — it drew one indicator per off-screen
+     marker, which piled up into visual corruption once the dataset grew to
+     a city-wide facility count. See README for details / how to re-enable
+     it scoped to a small feature set. -->
 
 <!-- Leaflet.locatecontrol — GPS "find me" control, https://github.com/domoritz/leaflet-locatecontrol -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.85.1/L.Control.Locate.min.css" />
@@ -177,23 +179,24 @@
   ]);
 
   // ---- Marker styling ---------------------------------------------------
-  // Canvas-rendered circle markers rather than divIcon (DOM element) markers.
-  // Two reasons:
-  //   1. Firefox has a known bug where divIcon markers' CSS transforms get
-  //      miscalculated specifically during the zoom animation:
-  //      https://github.com/Leaflet/Leaflet/issues/6249 — visible as
-  //      markers rendering at the wrong position, which with many markers
-  //      piled up can look like a block of visual noise.
-  //   2. Canvas markers don't create a DOM element per marker at all, which
-  //      matters once the real OSM-sourced data (hundreds of benches across
-  //      Mainz, easily) replaces the tiny placeholder sample — canvas
-  //      rendering stays fast and light where per-marker DOM elements don't.
-  // All markers share one L.canvas() renderer instance so Leaflet batches
-  // them onto a single <canvas>, rather than one per marker.
-  const canvasRenderer = L.canvas({ padding: 0.5 });
-
-  function styleFor(category) {
-    return categories[category] || { color: "#555", label: category };
+  function iconFor(category) {
+    const style = categories[category] || { color: "#555", symbol: "?" };
+    return L.divIcon({
+      className: "facility-marker",
+      html: `<div style="
+        background:${style.color};
+        color:#fff;
+        width:26px;height:26px;border-radius:50% 50% 50% 0;
+        transform:rotate(-45deg);
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 1px 3px rgba(0,0,0,0.4);
+        border:2px solid #fff;">
+        <span style="transform:rotate(45deg);font:600 11px sans-serif;">${style.symbol}</span>
+      </div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 26],
+      popupAnchor: [0, -24],
+    });
   }
 
   function popupContent(props, category) {
@@ -214,12 +217,8 @@
   }
 
   // One Leaflet layerGroup per category, so the sidebar checkboxes can
-  // toggle them independently, plus one master group that always holds
-  // every visible marker (used by EdgeMarker below). This group is
-  // intentionally never added to the map itself — it's just a registry
-  // EdgeMarker reads from; the actual visible layers are categoryLayers.
+  // toggle them independently.
   const categoryLayers = {};
-  const allMarkersGroup = L.layerGroup();
 
   function addFeatureCollection(fc) {
     (fc.features || []).forEach((feature) => {
@@ -227,39 +226,18 @@
       if (!categories[category]) return; // skip unknown categories quietly
 
       const [lon, lat] = feature.geometry.coordinates;
-      const style = styleFor(category);
-      const marker = L.circleMarker([lat, lon], {
-        renderer: canvasRenderer,
-        radius: 8,
-        color: "#fff", // marker outline, for contrast against the basemap
-        weight: 2,
-        fillColor: style.color,
-        fillOpacity: 0.9,
-      });
+      const marker = L.marker([lat, lon], { icon: iconFor(category) });
       marker.bindPopup(popupContent(feature.properties, category));
 
       if (!categoryLayers[category]) {
         categoryLayers[category] = L.layerGroup().addTo(map);
       }
       categoryLayers[category].addLayer(marker);
-      allMarkersGroup.addLayer(marker);
     });
   }
 
   addFeatureCollection(osmData);
   addFeatureCollection(customData);
-
-  // ---- Off-screen indicators (Leaflet.EdgeMarker) ------------------------
-  // https://github.com/ubergesundheit/Leaflet.EdgeMarker
-  const edgeMarkers = L.edgeMarker({
-    icon: L.icon({
-      iconUrl: "https://cdn.jsdelivr.net/gh/ubergesundheit/Leaflet.EdgeMarker@master/images/edge-arrow-marker-black.png",
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-    }),
-    rotateIcons: true,
-    layerGroup: allMarkersGroup, // only track the facility markers, not the tile layer etc.
-  }).addTo(map);
 
   // ---- Category filter panel ---------------------------------------------
   const listEl = document.getElementById("category-list");
@@ -281,14 +259,6 @@
       } else {
         map.removeLayer(layer);
       }
-      // Keep EdgeMarker + the "all markers" group in sync with what's
-      // actually visible, so hidden categories don't show edge arrows.
-      allMarkersGroup.clearLayers();
-      Object.entries(categoryLayers).forEach(([cat, grp]) => {
-        if (map.hasLayer(grp)) {
-          grp.eachLayer((m) => allMarkersGroup.addLayer(m));
-        }
-      });
     });
   });
 

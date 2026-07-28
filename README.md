@@ -6,7 +6,7 @@ and parks in Mainz, sourced from OpenStreetMap.
 ## How it fits together
 
 - **`categories.json`** — the one file to edit to add a new facility type.
-  Maps an OSM tag (`key=value`) to a label and marker color.
+  Maps an OSM tag (`key=value`) to a label, color and marker symbol.
 - **`data/facilities.geojson`** — OSM-derived data. Regenerated automatically
   by the scheduled GitHub Action (see below) — don't hand-edit it, your
   changes will be overwritten on the next run.
@@ -21,21 +21,14 @@ and parks in Mainz, sourced from OpenStreetMap.
   (GitHub Actions' own
   [`schedule` trigger](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule),
   no separate server needed) and commits the result if it changed.
-- **`index.html`** — the map itself: Leaflet, category filters, GPS locate
-  control, and Leaflet.EdgeMarker for off-screen indicators. Markers are
-  rendered as canvas circles (`L.circleMarker` on a shared `L.canvas()`
-  renderer), not `L.divIcon` DOM pins — deliberately, to avoid a
-  [known Firefox bug](https://github.com/Leaflet/Leaflet/issues/6249)
-  where divIcon markers' position gets corrupted during the zoom
-  animation, and because canvas markers stay fast with the hundreds of
-  points a city-wide dataset (benches especially) can produce. Worth
-  keeping in mind if you're tempted to switch back to custom pin shapes.
+- **`index.html`** — the map itself: Leaflet, category filters, and a GPS
+  locate control. Markers are pins (`L.divIcon`).
 
 ## Adding a facility category
 
 1. Add an entry to `categories.json`, e.g.:
    ```json
-   "amenity=bicycle_parking": { "label": "Bike parking", "color": "#6C5B7B" }
+   "amenity=bicycle_parking": { "label": "Bike parking", "color": "#6C5B7B", "symbol": "P" }
    ```
 2. Look up the correct OSM tag on the
    [Map Features wiki](https://wiki.openstreetmap.org/wiki/Map_features)
@@ -176,9 +169,29 @@ corner intact — it's required by the license.
 ## Libraries used
 
 - [Leaflet](https://leafletjs.com/reference.html)
-- [Leaflet.EdgeMarker](https://github.com/ubergesundheit/Leaflet.EdgeMarker) —
-  shows arrows at the map edge pointing toward markers outside the current view
 - [leaflet-locatecontrol](https://github.com/domoritz/leaflet-locatecontrol) —
   the GPS "find me" button, uses the browser's
   [Geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)
   under the hood (requires HTTPS, which GitHub Pages provides automatically)
+
+## Leaflet.EdgeMarker — disabled
+
+[Leaflet.EdgeMarker](https://github.com/ubergesundheit/Leaflet.EdgeMarker)
+(shows arrows at the map edge pointing toward markers outside the current
+view) was in an earlier version of this project but has been removed. It
+draws one indicator per off-screen marker — fine for a handful of
+features, but with a city-wide dataset (hundreds of benches alone once
+real OSM data replaced the placeholder sample), the large number of
+off-screen markers at typical zoom levels produced a dense, visually
+corrupted mass of overlapping indicators piling up at the viewport edges,
+persisting and relocating oddly as the map was zoomed. Switching marker
+rendering (canvas vs. DOM) made no difference, which pointed at
+EdgeMarker's own per-off-screen-marker rendering rather than the markers
+themselves.
+
+If you want off-screen indicators back, it'd need to be scoped so it
+doesn't try to render hundreds of icons at once — for example, only
+enabling it for a single category at a time with a naturally small count
+(like `leisure=park`), or writing a custom indicator that shows a single
+"N facilities off-screen, this direction" badge instead of one icon per
+feature.

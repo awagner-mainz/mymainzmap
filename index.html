@@ -224,7 +224,41 @@
 <script>
 (async function () {
   // ---- Map setup -----------------------------------------------------
-  const map = L.map("map", { zoomControl: true }).setView([49.9929, 8.2473], 13);
+  // Default view if GPS isn't available/granted in time. Read off an OSM
+  // permalink hash, which is always #map={zoom}/{lat}/{lon} — e.g.
+  // https://www.openstreetmap.org/#map=17/49.999506/8.273606 means
+  // zoom 17 at that lat/lon. Leaflet uses the same zoom numbering, so no
+  // conversion is needed; the three numbers can be copied straight in.
+  const DEFAULT_VIEW = { lat: 49.999506, lon: 8.273606, zoom: 17 };
+
+  const map = L.map("map", { zoomControl: true }).setView(
+    [DEFAULT_VIEW.lat, DEFAULT_VIEW.lon],
+    DEFAULT_VIEW.zoom
+  );
+
+  // Try to recenter on the user's current GPS location shortly after load.
+  // The map already shows the default view immediately above, rather than
+  // staying blank while waiting on the geolocation permission prompt/fix —
+  // this just re-centers it if/when a fix arrives. If the user has already
+  // started panning or zooming by then, their action is left alone rather
+  // than being overridden out from under them.
+  let userHasInteractedWithMap = false;
+  map.once("dragstart zoomstart", () => {
+    userHasInteractedWithMap = true;
+  });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        if (userHasInteractedWithMap) return;
+        map.setView([position.coords.latitude, position.coords.longitude], DEFAULT_VIEW.zoom);
+      },
+      () => {
+        /* permission denied, unavailable, or timed out — default view stays */
+      },
+      { timeout: 8000, maximumAge: 5 * 60 * 1000 }
+    );
+  }
 
   // Tile layer: CARTO Voyager — bolder, larger labels than Positron (which
   // uses deliberately thin/light type since it's designed as an inert

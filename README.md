@@ -50,6 +50,23 @@ and parks in Mainz, sourced from OpenStreetMap.
    repo's **Actions** tab → "Update facilities data from OpenStreetMap" →
    **Run workflow**.
 
+## Initial map view
+
+On load, the map first shows a default location (`DEFAULT_VIEW` near the
+top of the `<script>` in `index.html` — currently Mainz's Höfchen area at
+zoom 17), then tries to recenter on the user's GPS position shortly after,
+if the browser grants permission in time (an 8s timeout; if it's denied,
+unavailable, or too slow, the default view just stays). If the user has
+already started panning or zooming by the time a GPS fix arrives, that's
+left alone rather than yanking the map out from under them.
+
+To change the default: pan/zoom to the spot you want on
+[openstreetmap.org](https://www.openstreetmap.org), then read its URL
+hash — always `#map={zoom}/{lat}/{lon}` (e.g. `#map=17/49.999506/8.273606`
+is zoom 17 at that lat/lon) — and copy those three numbers into
+`DEFAULT_VIEW`. Leaflet uses the same zoom numbering as OSM's own map, so
+no conversion is needed.
+
 ## Category groups and the collapsible panel
 
 As the category list grows, a flat checkbox list stops being usable —

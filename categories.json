@@ -4,6 +4,7 @@
     "label": "Public toilet",
     "color": "#2E86AB",
     "symbol": "T",
+    "group": "Sanitation",
     "match": [{ "key": "amenity", "value": "toilets" }]
   },
   {
@@ -11,6 +12,7 @@
     "label": "Drinking water tap",
     "color": "#1B998B",
     "symbol": "W",
+    "group": "Water",
     "match": [{ "key": "amenity", "value": "drinking_water" }]
   },
   {
@@ -18,6 +20,7 @@
     "label": "Fountain (drinking water)",
     "color": "#0FB5AE",
     "symbol": "W",
+    "group": "Water",
     "match": [
       { "key": "amenity", "value": "fountain" },
       { "key": "drinking_water", "value": "yes" }
@@ -28,6 +31,7 @@
     "label": "Bench",
     "color": "#A66E38",
     "symbol": "B",
+    "group": "Seating & recreation",
     "match": [{ "key": "amenity", "value": "bench" }]
   },
   {
@@ -35,6 +39,7 @@
     "label": "Playground",
     "color": "#E4572E",
     "symbol": "P",
+    "group": "Seating & recreation",
     "match": [{ "key": "leisure", "value": "playground" }]
   },
   {
@@ -42,6 +47,7 @@
     "label": "Park",
     "color": "#2E933C",
     "symbol": "G",
+    "group": "Green space",
     "match": [{ "key": "leisure", "value": "park" }]
   }
 ]

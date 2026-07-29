@@ -46,14 +46,41 @@
     border: 1px solid var(--panel-border);
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-    padding: 10px 14px;
-    max-width: 220px;
+    max-width: 240px;
     font-size: 14px;
+  }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 10px 10px 14px;
   }
   #category-panel h1 {
     font-size: 14px;
     font-weight: 600;
-    margin: 0 0 8px;
+    margin: 0;
+  }
+  #panel-toggle {
+    background: none;
+    border: none;
+    font-size: 16px;
+    line-height: 1;
+    padding: 4px 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+  }
+  #category-panel.collapsed #panel-toggle {
+    transform: rotate(-90deg);
+  }
+  #panel-body {
+    padding: 0 14px 10px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  #category-panel.collapsed #panel-body {
+    display: none;
   }
   #category-panel label {
     display: flex;
@@ -80,6 +107,53 @@
     padding: 0 0 8px;
     cursor: pointer;
     text-decoration: underline;
+  }
+
+  /* Category groups */
+  .category-group {
+    border-top: 1px solid var(--panel-border);
+    padding: 6px 0;
+  }
+  .category-group:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+  .category-group summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 2px 0;
+    list-style: none; /* hide default marker so our own chevron (via CSS) is the only one */
+  }
+  .category-group summary::-webkit-details-marker {
+    display: none;
+  }
+  .category-group summary::before {
+    content: "\25B8"; /* ▸ */
+    display: inline-block;
+    margin-right: 4px;
+    transition: transform 0.15s ease;
+    color: var(--text-muted);
+  }
+  .category-group[open] summary::before {
+    transform: rotate(90deg);
+  }
+  .group-toggle-all {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 400;
+  }
+  .category-group .category-items {
+    padding-left: 4px;
   }
 
   .facility-popup h3 {
@@ -121,9 +195,14 @@
   /* Small screens: collapse the panel to not cover the whole map */
   @media (max-width: 480px) {
     #category-panel {
-      max-width: 150px;
+      max-width: 170px;
       font-size: 13px;
-      padding: 8px 10px;
+    }
+    .panel-header {
+      padding: 8px 8px 8px 10px;
+    }
+    #panel-body {
+      padding: 0 10px 8px;
     }
   }
 </style>
@@ -132,9 +211,14 @@
 
 <div id="map"></div>
 <div id="category-panel">
-  <h1>Facilities</h1>
-  <button class="toggle-all" id="toggle-all">show / hide all</button>
-  <div id="category-list"><!-- populated from categories.json --></div>
+  <div class="panel-header">
+    <h1>Facilities</h1>
+    <button id="panel-toggle" aria-label="Collapse facilities panel" aria-expanded="true">&#9662;</button>
+  </div>
+  <div id="panel-body">
+    <button class="toggle-all" id="toggle-all">show / hide all</button>
+    <div id="group-list"><!-- populated from categories.json, grouped by category.group --></div>
+  </div>
 </div>
 
 <script>
@@ -142,19 +226,27 @@
   // ---- Map setup -----------------------------------------------------
   const map = L.map("map", { zoomControl: true }).setView([49.9929, 8.2473], 13);
 
-  // Tile layer: CARTO Positron — a plain, label-only basemap style
-  // (streets, building outlines, place names) with no baked-in shop/amenity
-  // icons. Regular OSM-Carto tiles (tile.openstreetmap.org) render POI
-  // icons directly into the image pixels, which isn't something we can
-  // filter — there's no layer to toggle, it's the basemap's own opinion
-  // about what to show. Positron is designed for exactly this situation:
-  // overlaying your own point data without visual competition.
-  // Docs: https://github.com/CartoDB/basemap-styles
+  // Tile layer: CARTO Voyager — bolder, larger labels than Positron (which
+  // uses deliberately thin/light type since it's designed as an inert
+  // background). Voyager is the readability upgrade; the cost is it's
+  // slightly busier than pure Positron (subtle land-use coloring, a modest
+  // set of POI icons) — still nowhere near full OSM-Carto's shop/restaurant
+  // clutter that started this whole basemap discussion.
+  // Style comparison: https://github.com/CartoDB/basemap-styles
   //
-  // This also happens to take load off OSM's own donated tile servers,
-  // which is a nice side effect but wasn't the reason for the switch.
-  // CARTO's basemap service is free with its own (similarly best-effort,
-  // no-SLA) usage terms: https://carto.com/attributions
+  // Alternative considered: OSM's "German Style" (tile.openstreetmap.de),
+  // which has bold, German-localized labels (Straße -> Str., etc.) and is
+  // a common choice for German maps. Not used here because it's a fork of
+  // the full Standard/osm-carto render — switching to it would bring back
+  // every shop/restaurant/POI icon we deliberately moved away from earlier.
+  // It also has its own, separately more restrictive usage terms (commercial
+  // and high-traffic use is restricted): https://wiki.openstreetmap.org/wiki/DE:Tile_usage_policy
+  // If you'd rather have the German-style look and accept the icon clutter
+  // back, swap the tileLayer call below for:
+  //   L.tileLayer("https://tile.openstreetmap.de/{z}/{x}/{y}.png", {
+  //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  //     maxZoom: 18,
+  //   }).addTo(map);
   //
   // This site's traffic is small and interactive-only (normal user pan/zoom,
   // no headless rendering, no pre-fetching). If CARTO access is ever
@@ -166,11 +258,11 @@
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
     '&copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
     attribution: mapAttribution,
     subdomains: "abcd",
     maxZoom: 20,
-    detectRetina: true, // required for the {r} placeholder above to resolve to "" or "@2x"
+    detectRetina: true, // sharper labels on high-DPI phone screens — same content, not literally bigger text, but crisper
   }).addTo(map);
 
   // ---- GPS locate control (mobile "find me") --------------------------
@@ -303,35 +395,93 @@
   addFeatureCollection(customData);
 
   // ---- Category filter panel ---------------------------------------------
-  const listEl = document.getElementById("category-list");
+  // Group categories by their `group` field (categories without one land in
+  // a fallback "Other" group), preserving categories.json order both for
+  // groups (first appearance) and for categories within a group.
+  const groups = new Map(); // groupName -> array of category objects
   categories.forEach((cat) => {
-    const id = `cat-${cat.id.replace(/[^a-z0-9]/gi, "-")}`;
-    const label = document.createElement("label");
-    label.innerHTML = `
-      <input type="checkbox" id="${id}" checked />
-      <span class="swatch" style="background:${cat.color}"></span>
-      ${escapeHtml(cat.label)}
-    `;
-    listEl.appendChild(label);
+    const groupName = cat.group || "Other";
+    if (!groups.has(groupName)) groups.set(groupName, []);
+    groups.get(groupName).push(cat);
+  });
 
-    label.querySelector("input").addEventListener("change", (e) => {
-      const layer = categoryLayers[cat.id];
-      if (!layer) return;
-      if (e.target.checked) {
-        map.addLayer(layer);
-      } else {
-        map.removeLayer(layer);
-      }
+  const groupListEl = document.getElementById("group-list");
+  groups.forEach((catsInGroup, groupName) => {
+    const groupEl = document.createElement("details");
+    groupEl.className = "category-group";
+    groupEl.open = true;
+
+    const summary = document.createElement("summary");
+    summary.innerHTML = `<span>${escapeHtml(groupName)}</span>`;
+    const groupToggleBtn = document.createElement("button");
+    groupToggleBtn.type = "button";
+    groupToggleBtn.className = "group-toggle-all";
+    groupToggleBtn.textContent = "toggle";
+    groupToggleBtn.addEventListener("click", (e) => {
+      // Don't let the click also open/close the <details> disclosure.
+      e.preventDefault();
+      e.stopPropagation();
+      const inputs = groupEl.querySelectorAll('input[type="checkbox"]');
+      const nextChecked = ![...inputs].every((i) => i.checked);
+      inputs.forEach((input) => {
+        input.checked = nextChecked;
+        input.dispatchEvent(new Event("change"));
+      });
     });
+    summary.appendChild(groupToggleBtn);
+    groupEl.appendChild(summary);
+
+    const itemsEl = document.createElement("div");
+    itemsEl.className = "category-items";
+
+    catsInGroup.forEach((cat) => {
+      const id = `cat-${cat.id.replace(/[^a-z0-9]/gi, "-")}`;
+      const label = document.createElement("label");
+      label.innerHTML = `
+        <input type="checkbox" id="${id}" checked />
+        <span class="swatch" style="background:${cat.color}"></span>
+        ${escapeHtml(cat.label)}
+      `;
+      itemsEl.appendChild(label);
+
+      label.querySelector("input").addEventListener("change", (e) => {
+        const layer = categoryLayers[cat.id];
+        if (!layer) return;
+        if (e.target.checked) {
+          map.addLayer(layer);
+        } else {
+          map.removeLayer(layer);
+        }
+      });
+    });
+
+    groupEl.appendChild(itemsEl);
+    groupListEl.appendChild(groupEl);
   });
 
   let allVisible = true;
   document.getElementById("toggle-all").addEventListener("click", () => {
     allVisible = !allVisible;
-    document.querySelectorAll("#category-list input").forEach((input) => {
+    document.querySelectorAll("#group-list input").forEach((input) => {
       input.checked = allVisible;
       input.dispatchEvent(new Event("change"));
     });
+  });
+
+  // Whole-panel collapse toggle. Defaults collapsed on narrow (mobile)
+  // viewports, since the expanded panel can otherwise cover most of a
+  // phone screen — expanded by default on wider screens.
+  const panelEl = document.getElementById("category-panel");
+  const panelToggleBtn = document.getElementById("panel-toggle");
+
+  function setPanelCollapsed(collapsed) {
+    panelEl.classList.toggle("collapsed", collapsed);
+    panelToggleBtn.setAttribute("aria-expanded", String(!collapsed));
+  }
+  setPanelCollapsed(window.matchMedia("(max-width: 480px)").matches);
+
+  panelToggleBtn.addEventListener("click", () => {
+    setPanelCollapsed(!panelEl.classList.contains("collapsed"));
   });
 })();
 </script>

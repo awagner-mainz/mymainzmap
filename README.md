@@ -35,15 +35,37 @@ and parks in Mainz, sourced from OpenStreetMap.
      "label": "Bike parking",
      "color": "#6C5B7B",
      "symbol": "P",
+     "group": "Transport",
      "match": [{ "key": "amenity", "value": "bicycle_parking" }]
    }
    ```
+   `group` controls which collapsible section of the sidebar panel this
+   category appears under (see below) — reuse an existing group name to
+   add to it, or use a new one to create a new section. It's optional; a
+   category without one lands in a fallback "Other" group.
 2. Look up the correct OSM tag on the
    [Map Features wiki](https://wiki.openstreetmap.org/wiki/Map_features)
    if you're not sure of the exact key/value.
 3. Either wait for the next scheduled run, or trigger it manually from the
    repo's **Actions** tab → "Update facilities data from OpenStreetMap" →
    **Run workflow**.
+
+## Category groups and the collapsible panel
+
+As the category list grows, a flat checkbox list stops being usable —
+`index.html` groups categories by their `group` field into collapsible
+sections (built from `categories.json`'s order, both for which group
+appears first and which category appears first within a group). Each
+group has its own "toggle" link to check/uncheck every category in that
+group at once, alongside the existing panel-wide "show / hide all".
+
+The whole panel is also collapsible via the chevron button next to
+"Facilities" — collapsed by default on narrow (≲480px) screens so it
+doesn't cover most of a phone's viewport, expanded by default on wider
+ones. This is a one-time default computed on page load
+(`window.matchMedia("(max-width: 480px)")` in `index.html`), not a
+live-resize listener — resizing an already-loaded page won't
+auto-collapse/expand it, only a fresh load will.
 
 ## Querying by more than one attribute
 
@@ -159,19 +181,33 @@ another instance from that wiki list to `OVERPASS_URLS`.
 3. The Action needs no secrets — it uses the default `GITHUB_TOKEN`, which
    already has write access to the repo it runs in.
 
-## Map tiles: CARTO Positron
+## Map tiles: CARTO Voyager
 
-`index.html` uses [CARTO Positron](https://github.com/CartoDB/basemap-styles)
-tiles — a plain, label-only basemap (streets, building outlines, place
-names) with no baked-in shop/amenity icons. This was a deliberate switch
-away from plain OSM-Carto tiles (`tile.openstreetmap.org`): that style
-renders POI icons — restaurants, shops, pharmacies — directly into the
-tile image pixels, which isn't something the app can filter or turn off;
-there's no layer to toggle, since it's part of the basemap's own opinion
-about what to show. Positron is designed for exactly this use case:
-overlaying your own point data without competing icon clutter. It also
-takes some load off OSM's own donated tile servers, a nice side effect
-though not the primary reason for the switch.
+`index.html` uses [CARTO Voyager](https://github.com/CartoDB/basemap-styles)
+tiles. Earlier this was Positron (a plain, very light-labeled basemap) —
+switched to Voyager because Positron's labels are deliberately thin/light
+type (it's designed as an inert background) and were hard to read,
+especially on a phone screen. Voyager has bolder, larger labels, at the
+cost of being slightly busier: some land-use coloring and a modest set of
+POI icons, though nowhere near full OSM-Carto's shop/restaurant clutter
+that motivated moving away from `tile.openstreetmap.org` in the first
+place.
+
+A note on retina/`detectRetina`: CARTO's `@2x` tiles are the same map
+content rendered at double pixel density — sharper on high-DPI phone
+screens, but not literally larger text in CSS pixels. That's already
+enabled; the actual legibility fix here is the bolder Voyager style itself.
+
+**Alternative considered: OSM's "German Style"** (`tile.openstreetmap.de`),
+a fork of the full Standard/osm-carto render with bold, German-localized
+labels (`Straße` → `Str.`, etc.) — a natural fit for a Mainz map, and
+genuinely more legible. Not used by default here because it's a Standard
+fork: switching to it brings back every shop/restaurant/POI icon. It also
+has its own, separately more restrictive usage terms (commercial and
+high-traffic use is restricted) — see
+[DE:Tile usage policy](https://wiki.openstreetmap.org/wiki/DE:Tile_usage_policy).
+If you'd rather have that look and accept the icon clutter, the swap is
+commented directly above the `L.tileLayer(...)` call in `index.html`.
 
 CARTO's basemap service is free, with its own best-effort, no-SLA terms
 (see [carto.com/attributions](https://carto.com/attributions)) similar in
@@ -241,6 +277,38 @@ for this kind of republished dataset. OpenStreetMap data is
 is why this project sources facility data from there rather than from the
 city directly. Keep the OSM attribution shown in the map's bottom-right
 corner intact — it's required by the license.
+
+## Future ideas (not implemented yet)
+
+**Quick-add a place from where you're standing.** The idea: a button that
+uses the device's current GPS position (already available via the locate
+control) to jump straight into editing OSM at that exact spot, for the
+"I'm standing right in front of this fountain and it's missing" moment.
+Two related but distinct flows, both worth having:
+
+- **Adding a brand-new point**: OSM's [iD editor](https://wiki.openstreetmap.org/wiki/ID)
+  can be opened pre-centered on a location via
+  `https://www.openstreetmap.org/edit?editor=id#map={zoom}/{lat}/{lon}`.
+  Whether iD also supports a URL parameter that jumps straight into "add
+  point" mode (rather than just centering the map, leaving the user to
+  click the point tool themselves) would need checking against iD's
+  current URL scheme when this gets built — not confirmed here.
+- **Editing/adding a photo to an existing place**: since every
+  OSM-sourced feature in `facilities.geojson` already carries `osm_type`
+  and `osm_id` (see `scripts/fetch_osm_data.py`), a marker popup could
+  include an "Edit this on OpenStreetMap" link built from those — likely
+  along the lines of `https://www.openstreetmap.org/edit?editor=id&{osm_type}={osm_id}`,
+  again worth confirming the exact current parameter format against OSM's
+  docs at implementation time.
+- **Lower-friction alternative for both cases**: [OSM Notes](https://wiki.openstreetmap.org/wiki/Notes)
+  let anyone — no account needed — drop a text flag at a location ("this
+  fountain isn't mapped" / "this bench is gone") for a mapper to act on
+  later. Less immediate than editing directly, but a much smaller ask of
+  a casual user than learning iD.
+
+Natural place for the entry points: a "+" button near the locate control
+for adding-new, and a line in `popupContent()` in `index.html` for
+editing-existing (both already have all the data they'd need available).
 
 ## Libraries used
 

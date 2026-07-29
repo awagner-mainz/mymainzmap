@@ -318,12 +318,31 @@
     .addTo(map);
 
   // ---- Load data --------------------------------------------------------
-  const [categories, osmData, customData] = await Promise.all([
+  const [categoriesData, osmData, customData] = await Promise.all([
     fetch("categories.json").then((r) => r.json()),
     fetch("data/facilities.geojson").then((r) => r.json()),
     fetch("data/custom-places.geojson").then((r) => r.json()),
   ]);
+  const categories = categoriesData.categories;
+  const categoryGroups = categoriesData.groups;
   const categoriesById = Object.fromEntries(categories.map((c) => [c.id, c]));
+  const groupsById = Object.fromEntries(categoryGroups.map((g) => [g.id, g]));
+  const FALLBACK_GROUP = { id: "other", label: "Other", default_enabled: true };
+
+  function groupFor(category) {
+    return groupsById[category.group] || FALLBACK_GROUP;
+  }
+
+  // A category starts checked/visible only if BOTH its own default_enabled
+  // and its group's default_enabled are true (or left unspecified, which
+  // defaults to true) — the group acts as a master switch for everything
+  // in it, and the category's own flag lets you fine-tune within a group
+  // that's otherwise on.
+  function isEnabledByDefault(category) {
+    const categoryDefault = category.default_enabled !== false;
+    const groupDefault = groupFor(category).default_enabled !== false;
+    return categoryDefault && groupDefault;
+  }
 
   // ---- Marker styling ---------------------------------------------------
   function iconFor(categoryId) {
@@ -419,7 +438,11 @@
       marker.bindPopup(popupContent(feature.properties, category));
 
       if (!categoryLayers[category]) {
-        categoryLayers[category] = L.layerGroup().addTo(map);
+        const layerGroup = L.layerGroup();
+        if (isEnabledByDefault(categoriesById[category])) {
+          layerGroup.addTo(map);
+        }
+        categoryLayers[category] = layerGroup;
       }
       categoryLayers[category].addLayer(marker);
     });
@@ -429,24 +452,35 @@
   addFeatureCollection(customData);
 
   // ---- Category filter panel ---------------------------------------------
-  // Group categories by their `group` field (categories without one land in
-  // a fallback "Other" group), preserving categories.json order both for
-  // groups (first appearance) and for categories within a group.
-  const groups = new Map(); // groupName -> array of category objects
+  // Bucket categories under their group (categories.json order is
+  // preserved both for groups — iterated from categoryGroups directly —
+  // and for categories within a group).
+  const categoriesByGroupId = new Map(); // group id -> array of category objects
   categories.forEach((cat) => {
-    const groupName = cat.group || "Other";
-    if (!groups.has(groupName)) groups.set(groupName, []);
-    groups.get(groupName).push(cat);
+    const groupId = groupFor(cat).id;
+    if (!categoriesByGroupId.has(groupId)) categoriesByGroupId.set(groupId, []);
+    categoriesByGroupId.get(groupId).push(cat);
   });
+  // Categories whose group isn't in categoryGroups at all fall back to
+  // FALLBACK_GROUP ("other"), which won't otherwise appear in the list below
+  // — make sure it's included if anything actually landed there.
+  const groupsToRender = categoriesByGroupId.has(FALLBACK_GROUP.id)
+    ? [...categoryGroups, FALLBACK_GROUP]
+    : categoryGroups;
 
   const groupListEl = document.getElementById("group-list");
-  groups.forEach((catsInGroup, groupName) => {
+  groupsToRender.forEach((group) => {
+    const catsInGroup = categoriesByGroupId.get(group.id);
+    if (!catsInGroup || catsInGroup.length === 0) return; // empty group, nothing to show
+
     const groupEl = document.createElement("details");
     groupEl.className = "category-group";
-    groupEl.open = true;
+    // Start collapsed if this group is off by default — matches "this
+    // section is switched off" with "this section is also tucked away".
+    groupEl.open = group.default_enabled !== false;
 
     const summary = document.createElement("summary");
-    summary.innerHTML = `<span>${escapeHtml(groupName)}</span>`;
+    summary.innerHTML = `<span>${escapeHtml(group.label)}</span>`;
     const groupToggleBtn = document.createElement("button");
     groupToggleBtn.type = "button";
     groupToggleBtn.className = "group-toggle-all";
@@ -470,9 +504,10 @@
 
     catsInGroup.forEach((cat) => {
       const id = `cat-${cat.id.replace(/[^a-z0-9]/gi, "-")}`;
+      const checked = isEnabledByDefault(cat);
       const label = document.createElement("label");
       label.innerHTML = `
-        <input type="checkbox" id="${id}" checked />
+        <input type="checkbox" id="${id}" ${checked ? "checked" : ""} />
         <span class="swatch" style="background:${cat.color}"></span>
         ${escapeHtml(cat.label)}
       `;
@@ -493,11 +528,14 @@
     groupListEl.appendChild(groupEl);
   });
 
-  let allVisible = true;
   document.getElementById("toggle-all").addEventListener("click", () => {
-    allVisible = !allVisible;
-    document.querySelectorAll("#group-list input").forEach((input) => {
-      input.checked = allVisible;
+    const inputs = document.querySelectorAll("#group-list input");
+    // If everything is currently checked, uncheck all; otherwise check
+    // all — works correctly even from a mixed state seeded by
+    // default_enabled, unlike a plain flip of a single remembered flag.
+    const nextChecked = ![...inputs].every((i) => i.checked);
+    inputs.forEach((input) => {
+      input.checked = nextChecked;
       input.dispatchEvent(new Event("change"));
     });
   });

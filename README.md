@@ -5,10 +5,12 @@ and parks in Mainz, sourced from OpenStreetMap.
 
 ## How it fits together
 
-- **`categories.json`** — the one file to edit to add a new facility type.
-  An array of categories, each with an `id`, `label`, `color`, `symbol`,
-  and a `match` list of OSM tags that must **all** be present (AND) for an
-  element to count as that category.
+- **`categories.json`** — the one file to edit to add a new facility type
+  or group. A `{ groups, categories }` object: `groups` is an array of
+  `{ id, label, default_enabled }`; `categories` is an array of
+  `{ id, label, color, symbol, group, default_enabled, match }`, where
+  `match` is a list of OSM tags that must **all** be present (AND) for an
+  element to count as that category, and `group` refers to a group's `id`.
 - **`data/facilities.geojson`** — OSM-derived data. Regenerated automatically
   by the scheduled GitHub Action (see below) — don't hand-edit it, your
   changes will be overwritten on the next run.
@@ -28,21 +30,24 @@ and parks in Mainz, sourced from OpenStreetMap.
 
 ## Adding a facility category
 
-1. Add an entry to `categories.json`, e.g.:
+1. Add an entry to `categories.json`'s `categories` array, e.g.:
    ```json
    {
      "id": "bicycle_parking",
      "label": "Bike parking",
      "color": "#6C5B7B",
      "symbol": "P",
-     "group": "Transport",
+     "group": "transport",
+     "default_enabled": true,
      "match": [{ "key": "amenity", "value": "bicycle_parking" }]
    }
    ```
-   `group` controls which collapsible section of the sidebar panel this
-   category appears under (see below) — reuse an existing group name to
-   add to it, or use a new one to create a new section. It's optional; a
-   category without one lands in a fallback "Other" group.
+   `group` is a group **id** (referencing an entry in the top-level
+   `groups` array — see below), controlling which collapsible sidebar
+   section this category appears under. Reuse an existing group id to add
+   to it, or add a new group to `groups` first to create a new section.
+   `group` is optional; a category whose group id doesn't match any entry
+   in `groups` lands in a fallback "Other" group.
 2. Look up the correct OSM tag on the
    [Map Features wiki](https://wiki.openstreetmap.org/wiki/Map_features)
    if you're not sure of the exact key/value.
@@ -70,11 +75,25 @@ no conversion is needed.
 ## Category groups and the collapsible panel
 
 As the category list grows, a flat checkbox list stops being usable —
-`index.html` groups categories by their `group` field into collapsible
+`index.html` groups categories by their `group` id into collapsible
 sections (built from `categories.json`'s order, both for which group
 appears first and which category appears first within a group). Each
 group has its own "toggle" link to check/uncheck every category in that
 group at once, alongside the existing panel-wide "show / hide all".
+
+**`default_enabled`** (on both groups and categories in `categories.json`,
+optional, defaults to `true` if omitted) controls what's checked/visible
+when the page first loads — it only affects the starting state, not
+whether a category can be turned on at all; everything remains toggleable
+either way. A category starts enabled only if **both** its own
+`default_enabled` and its group's are true — the group acts as a master
+switch: setting a group's `default_enabled` to `false` starts every
+category in it unchecked regardless of their individual settings, while a
+category's own `default_enabled: false` lets you start just that one off
+within a group that's otherwise on. A group that's off by default also
+starts visually collapsed in the panel, since there's not much point
+showing an expanded checklist for a section nothing in it is currently
+showing.
 
 The whole panel is also collapsible via the chevron button next to
 "Facilities" — collapsed by default on narrow (≲480px) screens so it

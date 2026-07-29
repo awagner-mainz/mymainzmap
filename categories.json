@@ -1,53 +1,67 @@
-[
-  {
-    "id": "toilets",
-    "label": "Public toilet",
-    "color": "#2E86AB",
-    "symbol": "T",
-    "group": "Sanitation",
-    "match": [{ "key": "amenity", "value": "toilets" }]
-  },
-  {
-    "id": "drinking_water",
-    "label": "Drinking water tap",
-    "color": "#1B998B",
-    "symbol": "W",
-    "group": "Water",
-    "match": [{ "key": "amenity", "value": "drinking_water" }]
-  },
-  {
-    "id": "fountain_drinking",
-    "label": "Fountain (drinking water)",
-    "color": "#0FB5AE",
-    "symbol": "W",
-    "group": "Water",
-    "match": [
-      { "key": "amenity", "value": "fountain" },
-      { "key": "drinking_water", "value": "yes" }
-    ]
-  },
-  {
-    "id": "bench",
-    "label": "Bench",
-    "color": "#A66E38",
-    "symbol": "B",
-    "group": "Seating & recreation",
-    "match": [{ "key": "amenity", "value": "bench" }]
-  },
-  {
-    "id": "playground",
-    "label": "Playground",
-    "color": "#E4572E",
-    "symbol": "P",
-    "group": "Seating & recreation",
-    "match": [{ "key": "leisure", "value": "playground" }]
-  },
-  {
-    "id": "park",
-    "label": "Park",
-    "color": "#2E933C",
-    "symbol": "G",
-    "group": "Green space",
-    "match": [{ "key": "leisure", "value": "park" }]
-  }
-]
+{
+  "groups": [
+    { "id": "sanitation", "label": "Sanitation", "default_enabled": true },
+    { "id": "water", "label": "Water", "default_enabled": true },
+    { "id": "seating_recreation", "label": "Seating & recreation", "default_enabled": true },
+    { "id": "green_space", "label": "Green space", "default_enabled": true }
+  ],
+  "categories": [
+    {
+      "id": "toilets",
+      "label": "Public toilet",
+      "color": "#2E86AB",
+      "symbol": "T",
+      "group": "sanitation",
+      "default_enabled": true,
+      "match": [{ "key": "amenity", "value": "toilets" }]
+    },
+    {
+      "id": "drinking_water",
+      "label": "Drinking water tap",
+      "color": "#1B998B",
+      "symbol": "W",
+      "group": "water",
+      "default_enabled": true,
+      "match": [{ "key": "amenity", "value": "drinking_water" }]
+    },
+    {
+      "id": "fountain_drinking",
+      "label": "Fountain (drinking water)",
+      "color": "#0FB5AE",
+      "symbol": "W",
+      "group": "water",
+      "default_enabled": true,
+      "match": [
+        { "key": "amenity", "value": "fountain" },
+        { "key": "drinking_water", "value": "yes" }
+      ]
+    },
+    {
+      "id": "bench",
+      "label": "Bench",
+      "color": "#A66E38",
+      "symbol": "B",
+      "group": "seating_recreation",
+      "default_enabled": true,
+      "match": [{ "key": "amenity", "value": "bench" }]
+    },
+    {
+      "id": "playground",
+      "label": "Playground",
+      "color": "#E4572E",
+      "symbol": "P",
+      "group": "seating_recreation",
+      "default_enabled": true,
+      "match": [{ "key": "leisure", "value": "playground" }]
+    },
+    {
+      "id": "park",
+      "label": "Park",
+      "color": "#2E933C",
+      "symbol": "G",
+      "group": "green_space",
+      "default_enabled": true,
+      "match": [{ "key": "leisure", "value": "park" }]
+    }
+  ]
+}

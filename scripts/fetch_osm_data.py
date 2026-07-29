@@ -57,7 +57,7 @@ OVERPASS_URLS = [
 # can get in touch if something's wrong — a generic "python-requests/x.x"
 # User-Agent is exactly what's getting caught by the current anti-scraper
 # filtering. Put your own contact info here (an email, or your repo URL).
-USER_AGENT = "mainz-facilities-map/1.0 (https://github.com/awagner-mainz/mymainzmap)"
+USER_AGENT = "mainz-facilities-map/1.0 (https://github.com/YOUR_USERNAME/YOUR_REPO)"
 
 # Mainz's administrative area, resolved by name rather than a hardcoded
 # relation id, so the query always matches the city's real boundary as
@@ -77,8 +77,11 @@ EXCLUDED_TAG_PREFIXES = ("source", "created_by", "fixme", "todo")
 
 
 def load_categories() -> list:
+    """Returns just the flat category list — the fetch/query logic here
+    doesn't care about groups or default_enabled, those are purely a
+    display concern handled in index.html."""
     with open(CATEGORIES_PATH, encoding="utf-8") as f:
-        return json.load(f)
+        return json.load(f)["categories"]
 
 
 def build_query(categories: list) -> str:

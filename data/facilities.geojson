@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-07-29T09:36:43Z",
-    "feature_count": 2521
+    "generated": "2026-08-03T04:25:54Z",
+    "feature_count": 2522
   },
   "features": [
     {
@@ -14039,6 +14039,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "check_date": "2026-07-31",
         "colour": "brown",
         "material": "wood",
         "seats": "4",
@@ -14060,6 +14061,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "check_date": "2026-07-31",
         "colour": "brown",
         "material": "wood",
         "seats": "4",
@@ -25987,8 +25989,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2403889,
-          50.0089319
+          8.2403379,
+          50.008913
         ]
       }
     },
@@ -47560,6 +47562,23 @@
         "coordinates": [
           8.1990025,
           49.9992937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1545976079
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2521471,
+          50.0131271
         ]
       }
     },

@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-08-03T04:25:54Z",
-    "feature_count": 2522
+    "generated": "2026-08-10T04:52:16Z",
+    "feature_count": 2547
   },
   "features": [
     {
@@ -37854,6 +37854,436 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "qn978",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14070875280
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.276325,
+          50.0010361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "x8uzg",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14070875281
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2740722,
+          49.998625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "ercgq",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14070875282
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239832,
+          49.989791
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "y9ddq",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14070875283
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.235319,
+          49.997962
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "xqqz5",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103667
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.23719,
+          50.011583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "a5s86",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103668
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.237132,
+          50.012071
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "j4rxu",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103669
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.237194,
+          50.012793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "3zngh",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103670
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.237471,
+          50.013903
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "35d4s",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103671
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.237193,
+          50.012886
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "xt6cv",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071103672
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239818,
+          50.012961
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "9d79c",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071125425
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.235576,
+          49.997793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "td2yb",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071125426
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.235574,
+          49.997815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "6h4sa",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071125427
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.236518,
+          49.998554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "5jzuv",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203161
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.241844,
+          49.990285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203162
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239603,
+          49.989758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "nqgmc",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203163
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239179,
+          49.989772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203164
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239603,
+          49.989758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "j2m5j",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203165
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239617,
+          49.989748
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "4m6rk",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203167
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239102,
+          49.990346
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "735gw",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203168
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239233,
+          49.990078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "gattw",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203169
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239128,
+          49.990347
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "87dfq",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203170
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.238906,
+          49.990826
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "dpgjm",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203171
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239237,
+          49.99104
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "7hcfr",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14071203172
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.239644,
+          49.991064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -39276,17 +39706,19 @@
     {
       "type": "Feature",
       "properties": {
+        "access": "yes",
         "leisure": "playground",
+        "name": "Spielplatz Marseillestraße",
+        "operator": "Stadt Mainz",
         "category": "playground",
-        "name": "Playground",
         "osm_type": "way",
         "osm_id": 99588370
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2272824,
-          50.0046558
+          8.2272738,
+          50.0046649
         ]
       }
     },
@@ -42686,8 +43118,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2496155,
-          49.9845564
+          8.2494212,
+          49.9844678
         ]
       }
     },
@@ -47579,6 +48011,24 @@
         "coordinates": [
           8.2521471,
           50.0131271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "access": "private",
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1547883987
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2499648,
+          49.9856352
         ]
       }
     },

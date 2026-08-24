@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-08-17T03:32:34Z",
-    "feature_count": 2547
+    "generated": "2026-08-24T03:35:07Z",
+    "feature_count": 2548
   },
   "features": [
     {
@@ -38280,6 +38280,26 @@
         "coordinates": [
           8.239644,
           49.991064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14112246167
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.1798131,
+          49.9930492
         ]
       }
     },

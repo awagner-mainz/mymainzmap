@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-08-31T03:31:02Z",
-    "feature_count": 2548
+    "generated": "2026-09-07T03:31:07Z",
+    "feature_count": 2557
   },
   "features": [
     {
@@ -2298,7 +2298,6 @@
         "indoor": "yes",
         "leisure": "playground",
         "name": "Tobolino",
-        "opening_hours:covid19": "Fr 14:00-18:30; Sa,Su 10:00-14:00, 15:00-19:00",
         "survey:date": "2021-11-27",
         "website": "https://www.tobolino-mainz.de/",
         "category": "playground",
@@ -12740,6 +12739,7 @@
       "properties": {
         "access": "yes",
         "leisure": "playground",
+        "mapillary": "1404771973221475",
         "wheelchair": "yes",
         "category": "playground",
         "name": "Playground",
@@ -12977,6 +12977,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-09-03",
         "material": "concrete",
         "category": "bench",
         "name": "Bench",
@@ -38306,6 +38307,116 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "no",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14139523369
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2494957,
+          50.0053758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "no",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14139850559
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2492493,
+          50.005749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "yes",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14139850560
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2491489,
+          50.0057831
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "yes",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14140527914
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2490112,
+          50.0058326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14142019753
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2218311,
+          50.0111068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14142019754
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2220375,
+          50.011128
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -38455,8 +38566,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2529661,
-          50.0084911
+          8.2529467,
+          50.0085005
         ]
       }
     },
@@ -39376,8 +39487,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2103846,
-          50.0084277
+          8.2103461,
+          50.0084445
         ]
       }
     },
@@ -42064,8 +42175,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.252777,
-          50.0086333
+          8.2527576,
+          50.0086427
         ]
       }
     },
@@ -48051,6 +48162,57 @@
         "coordinates": [
           8.2499648,
           49.9856352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "leisure": "park",
+        "category": "park",
+        "name": "Park",
+        "osm_type": "way",
+        "osm_id": 1554166043
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2493934,
+          50.0053343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1554461397
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2219929,
+          50.0113697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1556270301
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2944211,
+          49.978378
         ]
       }
     },

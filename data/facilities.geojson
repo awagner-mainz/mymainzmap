@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-09-07T03:31:07Z",
-    "feature_count": 2557
+    "generated": "2026-09-14T03:32:31Z",
+    "feature_count": 2559
   },
   "features": [
     {
@@ -16772,25 +16772,6 @@
     {
       "type": "Feature",
       "properties": {
-        "access": "customers",
-        "leisure": "playground",
-        "survey:date": "2021-03-27",
-        "category": "playground",
-        "name": "Playground",
-        "osm_type": "node",
-        "osm_id": 8567362218
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2949938,
-          49.987122
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "amenity": "bench",
         "backrest": "yes",
         "survey:date": "2021-03-27",
@@ -32084,6 +32065,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -38417,6 +38399,23 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "toilets",
+        "category": "toilets",
+        "name": "Public toilet",
+        "osm_type": "node",
+        "osm_id": 14159422455
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2493429,
+          50.0055392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -38490,8 +38489,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2548284,
-          50.0105344
+          8.2548379,
+          50.0105371
         ]
       }
     },
@@ -48213,6 +48212,43 @@
         "coordinates": [
           8.2944211,
           49.978378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "access": "customers",
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1558592209
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2957918,
+          49.9867798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "access": "customers",
+        "leisure": "playground",
+        "survey:date": "2026-09-13",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1558592210
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2951289,
+          49.9872091
         ]
       }
     },

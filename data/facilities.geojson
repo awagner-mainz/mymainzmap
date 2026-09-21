@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-09-14T03:32:31Z",
-    "feature_count": 2559
+    "generated": "2026-09-21T03:32:42Z",
+    "feature_count": 2558
   },
   "features": [
     {
@@ -961,16 +961,21 @@
         "addr:street": "Höfchen",
         "amenity": "toilets",
         "changing_table": "no",
-        "check_date": "2023-11-07",
+        "check_date": "2026-09-19",
         "fee": "no",
         "female": "no",
         "level": "-1",
         "male": "yes",
         "opening_hours": "24/7",
         "operator": "Wirtschaftsbetrieb Mainz",
+        "operator:wikidata": "Q133805486",
         "phone": "+49 6131 97250140",
+        "toilets:disposal": "flush",
+        "toilets:handwashing": "yes",
         "website": "https://www.mainz.de/microsite/wb/entwaesserung/181010100000018161_266784.php#SP-grouplist-0-1:18",
         "wheelchair": "no",
+        "wheelchair:description": "Treppe am Eingang.",
+        "wheelchair:description:en": "Steps at the entrance.",
         "category": "toilets",
         "name": "Public toilet",
         "osm_type": "node",
@@ -979,8 +984,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2730746,
-          49.9995147
+          8.2731282,
+          49.9995138
         ]
       }
     },
@@ -24681,16 +24686,20 @@
         "addr:street": "Schusterstraße / Markt",
         "amenity": "toilets",
         "changing_table": "no",
-        "check_date": "2023-11-07",
+        "check_date": "2026-09-19",
         "fee": "no",
         "female": "yes",
         "level": "-1",
         "male": "no",
         "opening_hours": "24/7",
         "operator": "Wirtschaftsbetrieb Mainz",
+        "operator:wikidata": "Q133805486",
         "phone": "+49 6131 97250140",
+        "toilets:handwashing": "yes",
         "website": "https://www.mainz.de/microsite/wb/entwaesserung/181010100000018161_266784.php#SP-grouplist-0-1:18",
         "wheelchair": "no",
+        "wheelchair:description": "Treppe am Eingang.",
+        "wheelchair:description:en": "Steps at the entrance.",
         "category": "toilets",
         "name": "Public toilet",
         "osm_type": "node",
@@ -24699,8 +24708,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2730592,
-          49.9996077
+          8.2731869,
+          49.9995629
         ]
       }
     },
@@ -26309,9 +26318,18 @@
     {
       "type": "Feature",
       "properties": {
+        "access": "yes",
         "amenity": "drinking_water",
+        "bottle": "yes",
+        "check_date": "2026-09-19",
+        "covered": "no",
+        "dog": "no",
+        "fee": "no",
         "fountain": "bubbler",
+        "indoor": "no",
+        "level": "0",
         "operator": "Stadt Mainz",
+        "wheelchair": "yes",
         "category": "drinking_water",
         "name": "Drinking water tap",
         "osm_type": "node",
@@ -31728,27 +31746,6 @@
         "coordinates": [
           8.2598139,
           50.0018109
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "amenity": "toilets",
-        "changing_table": "no",
-        "fee": "no",
-        "name": "Herrentoilette",
-        "toilets:position": "urinal",
-        "wheelchair": "no",
-        "category": "toilets",
-        "osm_type": "node",
-        "osm_id": 12875876014
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2731825,
-          49.9994202
         ]
       }
     },

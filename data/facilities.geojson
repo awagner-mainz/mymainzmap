@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-09-21T03:32:42Z",
-    "feature_count": 2558
+    "generated": "2026-09-28T03:36:24Z",
+    "feature_count": 2561
   },
   "features": [
     {
@@ -12397,8 +12397,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.3239692,
-          49.9692389
+          8.323843,
+          49.9693407
         ]
       }
     },
@@ -12415,8 +12415,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.3239899,
-          49.9692235
+          8.3238765,
+          49.9693084
         ]
       }
     },
@@ -37891,6 +37891,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "y9ddq",
         "category": "bench",
         "name": "Bench",
@@ -37909,6 +37910,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "xqqz5",
         "category": "bench",
         "name": "Bench",
@@ -37927,6 +37929,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "a5s86",
         "category": "bench",
         "name": "Bench",
@@ -37945,6 +37948,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "j4rxu",
         "category": "bench",
         "name": "Bench",
@@ -37981,6 +37985,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "35d4s",
         "category": "bench",
         "name": "Bench",
@@ -38017,6 +38022,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "9d79c",
         "category": "bench",
         "name": "Bench",
@@ -38035,6 +38041,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "td2yb",
         "category": "bench",
         "name": "Bench",
@@ -38053,6 +38060,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "6h4sa",
         "category": "bench",
         "name": "Bench",
@@ -38413,6 +38421,92 @@
     {
       "type": "Feature",
       "properties": {
+        "access": "permissive",
+        "amenity": "toilets",
+        "check_date": "2026-09-19",
+        "covered": "yes",
+        "description": "Im Cinestar.",
+        "description:en": "Inside the Cinestar.",
+        "fee": "no",
+        "female": "yes",
+        "indoor": "yes",
+        "level": "0",
+        "location": "indoor",
+        "male": "yes",
+        "outdoor": "no",
+        "toilets:disposal": "flush",
+        "toilets:handwashing": "yes",
+        "wheelchair": "yes",
+        "category": "toilets",
+        "name": "Public toilet",
+        "osm_type": "node",
+        "osm_id": 14206149645
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2793037,
+          49.993737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14209281390
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2749732,
+          49.9992251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14209320720
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2749117,
+          49.999215
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14224897115
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.3239036,
+          49.9692733
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -38540,8 +38634,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2620471,
-          50.0028499
+          8.2620543,
+          50.0028507
         ]
       }
     },
@@ -39605,7 +39699,7 @@
         "name": "Hartenbergpark",
         "opening_hours": "24/7",
         "operator": "Stadt Mainz",
-        "website": "https://www.mainz.de/freizeit-und-sport/im-gruenen/hartenbergpark.php",
+        "website": "https://www.mainz.de/angebote-entdecken/gruenes-mainz/gruenanlagen_und_parks/hartenbergpark",
         "wikidata": "Q138645899",
         "category": "park",
         "osm_type": "way",
@@ -44275,6 +44369,7 @@
       "properties": {
         "access": "private",
         "leisure": "playground",
+        "location": "roof",
         "category": "playground",
         "name": "Playground",
         "osm_type": "way",
@@ -44293,6 +44388,7 @@
       "properties": {
         "access": "private",
         "leisure": "playground",
+        "location": "roof",
         "category": "playground",
         "name": "Playground",
         "osm_type": "way",
@@ -44311,6 +44407,7 @@
       "properties": {
         "access": "private",
         "leisure": "playground",
+        "location": "roof",
         "category": "playground",
         "name": "Playground",
         "osm_type": "way",
@@ -44329,6 +44426,7 @@
       "properties": {
         "access": "private",
         "leisure": "playground",
+        "location": "roof",
         "category": "playground",
         "name": "Playground",
         "osm_type": "way",
@@ -44767,26 +44865,6 @@
         "coordinates": [
           8.2558468,
           49.9807914
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "access": "yes",
-        "amenity": "toilets",
-        "building": "container",
-        "wheelchair": "yes",
-        "category": "toilets",
-        "name": "Public toilet",
-        "osm_type": "way",
-        "osm_id": 1272543148
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.3240434,
-          49.9690363
         ]
       }
     },

@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-09-28T03:36:24Z",
-    "feature_count": 2561
+    "generated": "2026-10-05T03:39:47Z",
+    "feature_count": 2564
   },
   "features": [
     {
@@ -34401,8 +34401,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.1830329,
-          49.987357
+          8.1830648,
+          49.9873439
         ]
       }
     },
@@ -37967,6 +37967,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "3zngh",
         "category": "bench",
         "name": "Bench",
@@ -38501,6 +38502,63 @@
         "coordinates": [
           8.3239036,
           49.9692733
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14234450083
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2608814,
+          50.0034959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14234450084
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2605233,
+          50.0033124
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14234450085
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2604126,
+          50.0033515
         ]
       }
     },
@@ -42244,8 +42302,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2690469,
-          49.9995457
+          8.2690428,
+          49.9995414
         ]
       }
     },
@@ -48508,6 +48566,7 @@
     {
       "type": "Feature",
       "properties": {
+        "access": "yes",
         "leisure": "playground",
         "name": "Spielplatz Mauritzenplatz",
         "type": "multipolygon",

@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-10-05T03:39:47Z",
-    "feature_count": 2564
+    "generated": "2026-10-12T03:43:07Z",
+    "feature_count": 2563
   },
   "features": [
     {
@@ -2381,6 +2381,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-11",
         "material": "wood",
         "category": "bench",
         "name": "Bench",
@@ -3519,6 +3520,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-11",
         "material": "wood",
         "category": "bench",
         "name": "Bench",
@@ -4832,6 +4834,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-11",
         "material": "wood",
         "category": "bench",
         "name": "Bench",
@@ -6838,6 +6841,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "check_date": "2026-10-06",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -31905,26 +31909,6 @@
     {
       "type": "Feature",
       "properties": {
-        "addr:housenumber": "8",
-        "addr:street": "Parcusstraße",
-        "amenity": "toilets",
-        "opening_hours": "24/7",
-        "category": "toilets",
-        "name": "Public toilet",
-        "osm_type": "node",
-        "osm_id": 12909075701
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2617154,
-          50.0013438
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "amenity": "bench",
         "backrest": "yes",
         "level": "0",
@@ -44681,9 +44665,10 @@
     {
       "type": "Feature",
       "properties": {
+        "alt_name": "In der Brausche",
         "leisure": "park",
+        "name": "An der Brausch",
         "category": "park",
-        "name": "Park",
         "osm_type": "way",
         "osm_id": 1171602979
       },

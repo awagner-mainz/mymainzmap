@@ -3,7 +3,7 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-10-12T03:43:07Z",
+    "generated": "2026-10-19T03:32:40Z",
     "feature_count": 2563
   },
   "features": [
@@ -12948,6 +12948,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-17",
         "material": "concrete",
         "category": "bench",
         "name": "Bench",
@@ -12967,6 +12968,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-17",
         "material": "concrete",
         "category": "bench",
         "name": "Bench",
@@ -14450,6 +14452,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-17",
         "material": "concrete",
         "category": "bench",
         "name": "Bench",
@@ -14469,6 +14472,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "no",
+        "check_date": "2026-10-17",
         "material": "concrete",
         "category": "bench",
         "name": "Bench",
@@ -38206,6 +38210,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "yes",
         "ref:benchmap": "87dfq",
         "category": "bench",
         "name": "Bench",
@@ -38224,6 +38229,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "no",
         "ref:benchmap": "dpgjm",
         "category": "bench",
         "name": "Bench",
@@ -38242,6 +38248,7 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "backrest": "no",
         "ref:benchmap": "7hcfr",
         "category": "bench",
         "name": "Bench",

@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-10-19T03:32:40Z",
-    "feature_count": 2563
+    "generated": "2026-10-26T03:35:13Z",
+    "feature_count": 2565
   },
   "features": [
     {
@@ -2287,33 +2287,6 @@
         "coordinates": [
           8.2325341,
           49.9716498
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "access": "customers",
-        "addr:city": "Mainz",
-        "addr:country": "DE",
-        "addr:housenumber": "11",
-        "addr:postcode": "55130",
-        "addr:street": "Dammweg",
-        "fee": "yes",
-        "indoor": "yes",
-        "leisure": "playground",
-        "name": "Tobolino",
-        "survey:date": "2021-11-27",
-        "website": "https://www.tobolino-mainz.de/",
-        "category": "playground",
-        "osm_type": "node",
-        "osm_id": 1668682975
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.3177528,
-          49.9663009
         ]
       }
     },
@@ -38550,6 +38523,60 @@
         "coordinates": [
           8.2604126,
           50.0033515
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "ref:benchmap": "4javg",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14303271926
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.276077,
+          49.996042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14304552968
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2726038,
+          49.9969006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14304552973
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2724141,
+          49.99681
         ]
       }
     },

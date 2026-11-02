@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-10-26T03:35:13Z",
-    "feature_count": 2565
+    "generated": "2026-11-02T03:22:17Z",
+    "feature_count": 2567
   },
   "features": [
     {
@@ -3074,6 +3074,8 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "colour": "brown",
+        "material": "wood",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -30294,7 +30296,9 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "armrest": "no",
         "backrest": "yes",
+        "material": "metal",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -38577,6 +38581,46 @@
         "coordinates": [
           8.2724141,
           49.99681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "colour": "brown",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14338280408
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.1835026,
+          49.9843681
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "colour": "brown",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14338398555
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.1847251,
+          49.9829702
         ]
       }
     },

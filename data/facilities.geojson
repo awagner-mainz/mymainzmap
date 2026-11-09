@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-11-02T03:22:17Z",
-    "feature_count": 2567
+    "generated": "2026-11-09T03:22:35Z",
+    "feature_count": 2572
   },
   "features": [
     {
@@ -38627,6 +38627,77 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14345280720
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2374699,
+          49.9862473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "no",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14345294070
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2374684,
+          49.9862929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14345339032
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2401244,
+          49.9831922
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14354209620
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2327964,
+          50.0146499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -48445,6 +48516,24 @@
         "coordinates": [
           8.2951289,
           49.9872091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "access": "private",
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1575906502
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2326716,
+          50.0146726
         ]
       }
     },

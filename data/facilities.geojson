@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-11-09T03:22:35Z",
-    "feature_count": 2572
+    "generated": "2026-11-16T03:25:00Z",
+    "feature_count": 2588
   },
   "features": [
     {
@@ -189,25 +189,6 @@
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
-        "osm_id": 325125620
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2843923,
-          49.9912026
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "amenity": "bench",
-        "backrest": "yes",
-        "check_date": "2021-06-28",
-        "category": "bench",
-        "name": "Bench",
-        "osm_type": "node",
         "osm_id": 325125622
       },
       "geometry": {
@@ -260,6 +241,7 @@
         "amenity": "bench",
         "backrest": "yes",
         "check_date": "2021-06-28",
+        "material": "metal",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -268,8 +250,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2838751,
-          49.9912654
+          8.283866,
+          49.9912434
         ]
       }
     },
@@ -286,8 +268,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2825821,
-          49.991852
+          8.2826989,
+          49.9918799
         ]
       }
     },
@@ -3720,8 +3702,11 @@
       "type": "Feature",
       "properties": {
         "amenity": "bench",
+        "armrest": "no",
         "backrest": "yes",
         "check_date": "2021-02-28",
+        "direction": "32",
+        "material": "wood",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -3730,8 +3715,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2897537,
-          49.9878257
+          8.2897511,
+          49.9878338
         ]
       }
     },
@@ -12314,6 +12299,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "check_date": "2026-11-12",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -12332,6 +12318,7 @@
       "properties": {
         "amenity": "bench",
         "backrest": "yes",
+        "check_date": "2026-11-12",
         "category": "bench",
         "name": "Bench",
         "osm_type": "node",
@@ -38698,6 +38685,327 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361778801
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2840252,
+          49.9912173
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361778901
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2840525,
+          49.9912163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779101
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2842187,
+          49.9911953
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "backrest": "yes",
+        "material": "metal",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779102
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2842499,
+          49.9911908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779104
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2865123,
+          49.9901422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779106
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2874669,
+          49.9895132
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779107
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2874429,
+          49.9895258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "direction": "32",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779109
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2898057,
+          49.9878097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "direction": "32",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779110
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2898379,
+          49.9877979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779111
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2907201,
+          49.9873748
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "direction": "32",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779202
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2896931,
+          49.9878562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779203
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2930035,
+          49.9859998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "direction": "32",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779301
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2897224,
+          49.9878458
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779302
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2906947,
+          49.9873905
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "direction": "32",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14361779401
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2898732,
+          49.987785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "access": "yes",
+        "amenity": "drinking_water",
+        "fee": "no",
+        "operator": "Stadt Mainz",
+        "wheelchair": "yes",
+        "category": "drinking_water",
+        "name": "Drinking water tap",
+        "osm_type": "node",
+        "osm_id": 14373095421
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2752829,
+          50.0038432
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14377898701
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2800113,
+          49.9674971
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -40784,6 +41092,7 @@
       "type": "Feature",
       "properties": {
         "access": "yes",
+        "dog": "no",
         "leisure": "playground",
         "category": "playground",
         "name": "Playground",
@@ -44937,28 +45246,6 @@
         "amenity": "toilets",
         "changing_table": "no",
         "indoor": "room",
-        "level": "-1",
-        "wheelchair": "yes",
-        "category": "toilets",
-        "name": "Public toilet",
-        "osm_type": "way",
-        "osm_id": 1226628972
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2267988,
-          49.9882432
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "access": "customers",
-        "amenity": "toilets",
-        "changing_table": "no",
-        "indoor": "room",
         "level": "3",
         "wheelchair": "yes",
         "category": "toilets",
@@ -48260,6 +48547,7 @@
     {
       "type": "Feature",
       "properties": {
+        "access": "private",
         "leisure": "playground",
         "category": "playground",
         "name": "Playground",
@@ -48534,6 +48822,23 @@
         "coordinates": [
           8.2326716,
           50.0146726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "leisure": "playground",
+        "category": "playground",
+        "name": "Playground",
+        "osm_type": "way",
+        "osm_id": 1578646817
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2800234,
+          49.9988153
         ]
       }
     },

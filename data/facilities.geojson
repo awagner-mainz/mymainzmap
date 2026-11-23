@@ -3,8 +3,8 @@
   "metadata": {
     "source": "OpenStreetMap contributors, via Overpass API",
     "license": "ODbL 1.0 - https://opendatacommons.org/licenses/odbl/",
-    "generated": "2026-11-16T03:25:00Z",
-    "feature_count": 2588
+    "generated": "2026-11-23T03:23:41Z",
+    "feature_count": 2595
   },
   "features": [
     {
@@ -24252,35 +24252,6 @@
     {
       "type": "Feature",
       "properties": {
-        "access": "customers",
-        "addr:city": "Mainz",
-        "addr:country": "DE",
-        "addr:housenumber": "76a",
-        "addr:postcode": "55122",
-        "addr:street": "Mombacher Straße",
-        "fee": "yes",
-        "indoor": "yes",
-        "leisure": "playground",
-        "name": "Kinderspielparadies Rambazamba",
-        "operator": "Rambazamba GmbH",
-        "phone": "+49 6131 5701770",
-        "website": "https://www.rambazamba-mainz.de/",
-        "wheelchair": "no",
-        "category": "playground",
-        "osm_type": "node",
-        "osm_id": 10171049810
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          8.2438773,
-          50.013003
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "access": "yes",
         "leisure": "playground",
         "category": "playground",
@@ -39006,6 +38977,152 @@
     {
       "type": "Feature",
       "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384609604
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2798529,
+          49.9987887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384609701
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.280255,
+          49.9983593
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384629345
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2922915,
+          49.9849142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384629346
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2923768,
+          49.9848691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384629347
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.292297,
+          49.9849749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "yes",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384629348
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2923214,
+          49.9849919
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "no",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384647649
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2921082,
+          49.9850187
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "amenity": "bench",
+        "armrest": "no",
+        "backrest": "no",
+        "material": "wood",
+        "category": "bench",
+        "name": "Bench",
+        "osm_type": "node",
+        "osm_id": 14384647650
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.292055,
+          49.9850549
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "access": "yes",
         "leisure": "playground",
         "name": "Zagrebplatz",
@@ -43841,8 +43958,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.2494212,
-          49.9844678
+          8.2493928,
+          49.9844693
         ]
       }
     },
